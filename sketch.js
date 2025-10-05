@@ -12,12 +12,12 @@ function setup() {
     createParameterGroup(
         {
             title: {
-                type: 'input',
+                type: INPUT_PARAMETER,
                 default: "Sketch",
                 callback: function (value) { title = value; }
             },
             width: {
-                type: 'range',
+                type: RANGE_PARAMETER,
                 default: 400,
                 min: 0,
                 max: 800,
@@ -28,7 +28,7 @@ function setup() {
                 }
             },
             height: {
-                type: 'range',
+                type: RANGE_PARAMETER,
                 default: 400,
                 min: 0,
                 max: 800,
@@ -45,7 +45,7 @@ function setup() {
     createParameterGroup(
         {
             num_circles: {
-                type: 'range',
+                type: RANGE_PARAMETER,
                 default: 1,
                 min: 1,
                 max: 5,
@@ -53,7 +53,7 @@ function setup() {
                 callback: function (value) { num_circles = value; }
             },
             circle_size: {
-                type: 'range',
+                type: RANGE_PARAMETER,
                 default: 100,
                 min: 10,
                 max: 300,
@@ -61,7 +61,7 @@ function setup() {
                 callback: function (value) { circle_size = value; }
             },
             color: {
-                type: 'color',
+                type: COLOR_PARAMETER,
                 default: [255, 60, 70],
                 callback: function (colorArray) { color = colorArray; }
             }

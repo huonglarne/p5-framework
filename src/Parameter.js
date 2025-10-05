@@ -12,20 +12,6 @@ class Parameter {
         window.parameterRegistry[name] = this;
     }
 
-    createControl() {
-        // Wait for controls container to be ready
-        const waitForContainer = () => {
-            const container = document.getElementById('controls');
-            if (container) {
-                this.controlElement = this.createControlElement();
-                container.appendChild(this.controlElement);
-            } else {
-                setTimeout(waitForContainer, 100);
-            }
-        };
-        waitForContainer();
-    }
-
     // Abstract method - to be implemented by subclasses
     createControlElement() {
         throw new Error('createControlElement must be implemented by subclasses');
@@ -256,20 +242,20 @@ function createParameterGroup(paramConfig, groupName = null) {
     for (const [varName, config] of Object.entries(paramConfig)) {
         let param;
 
-        if (config.type === 'color') {
+        if (config.type === COLOR_PARAMETER) {
             param = new ColorParameter(
                 varName,
                 config.default || config.value,
                 config.value
             );
-        } else if (config.type === 'input' || config.type === 'text' || config.type === 'number') {
+        } else if (config.type === INPUT_PARAMETER) {
             param = new InputParameter(
                 varName,
                 config.default || config.value,
                 config.type === 'number' ? 'number' : 'text',
                 config.value
             );
-        } else if (config.type === 'range' || ('min' in config && 'max' in config)) {
+        } else if (config.type === RANGE_PARAMETER) {
             param = new RangeParameter(
                 varName,
                 config.default || config.value,
@@ -284,13 +270,9 @@ function createParameterGroup(paramConfig, groupName = null) {
             param.setCallback(config.callback);
         }
 
-        // Override the parameter's createControl method to add to this group
-        const originalCreateControl = param.createControl;
-        param.createControl = function () {
-            this.controlElement = this.createControlElement();
-            groupContainer.appendChild(this.controlElement);
-        };
-        param.createControl();
+        param.controlElement = param.createControlElement();
+
+        groupContainer.appendChild(param.controlElement);
 
         parameters[varName] = param;
     }
