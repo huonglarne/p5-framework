@@ -18,21 +18,9 @@ function createControlsContainer(container) {
         font-family: Arial, sans-serif;
     `;
 
-    // Add title
-    const title = document.createElement('h3');
-    title.textContent = 'Controls';
-    title.style.cssText = `
-        margin: 0 0 15px 0;
-        color: #333;
-        font-size: 16px;
-        border-bottom: 2px solid #ddd;
-        padding-bottom: 8px;
-    `;
-    controlsContainer.appendChild(title);
-
     // Create reset button
     const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset All';
+    resetButton.textContent = 'Reset Settings (R)';
     resetButton.style.cssText = `
         background: #ff6b6b;
         color: white;
@@ -72,7 +60,7 @@ function createControlsContainer(container) {
 
     // Create save button
     const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save Canvas & Params';
+    saveButton.textContent = 'Save';
     saveButton.style.cssText = `
         background: #4ecdc4;
         color: white;
@@ -238,32 +226,7 @@ function loadParameterSettings(paramsData) {
     }
 
     // Show feedback to user
-    if (loadedCount > 0) {
-        // Create temporary notification
-        const notification = document.createElement('div');
-        notification.textContent = `Loaded ${loadedCount}/${totalCount} parameters`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #00b894;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 4px;
-            font-weight: bold;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Remove notification after 3 seconds
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                document.body.removeChild(notification);
-            }
-        }, 3000);
-    } else {
+    if (loadedCount <= 0) {
         alert('No matching parameters found in the settings file');
     }
 }
