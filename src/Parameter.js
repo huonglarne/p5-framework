@@ -71,13 +71,11 @@ class RangeParameter extends Parameter {
         container.style.marginBottom = '15px';
 
         const labelElement = document.createElement('label');
-        labelElement.textContent = `${this.name}: `;
-        labelElement.style.cssText = 'display: inline-block; width: 80px; font-weight: bold;';
+        labelElement.textContent = `${this.name}`;
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
 
         const slider = document.createElement('input');
         slider.type = 'range';
-
-        print("Slider range: ", this.name, this.min, this.max, this.value);
 
         slider.min = this.min;
         slider.max = this.max;
@@ -127,8 +125,8 @@ class ColorParameter extends Parameter {
         container.style.marginBottom = '15px';
 
         const labelElement = document.createElement('label');
-        labelElement.textContent = `${this.name}: `;
-        labelElement.style.cssText = 'display: inline-block; width: 80px; font-weight: bold;';
+        labelElement.textContent = `${this.name}`;
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
 
         const colorPicker = document.createElement('input');
         colorPicker.type = 'color';
@@ -191,8 +189,8 @@ class InputParameter extends Parameter {
         container.style.marginBottom = '15px';
 
         const labelElement = document.createElement('label');
-        labelElement.textContent = `${this.name}: `;
-        labelElement.style.cssText = 'display: inline-block; width: 80px; font-weight: bold;';
+        labelElement.textContent = `${this.name}`;
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
 
         const input = document.createElement('input');
         input.type = this.inputType;

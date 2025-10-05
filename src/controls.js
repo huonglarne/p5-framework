@@ -6,7 +6,7 @@ function createControlsContainer(container) {
 
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls';
-    
+
     controlsContainer.style.cssText = `
         width: 100%;
         background: #f0f0f0;
@@ -33,16 +33,16 @@ function createControlsContainer(container) {
         transition: background-color 0.2s;
         width: 100%;
     `;
-    
-    resetButton.addEventListener('mouseover', function() {
+
+    resetButton.addEventListener('mouseover', function () {
         this.style.backgroundColor = '#ff5252';
     });
-    
-    resetButton.addEventListener('mouseout', function() {
+
+    resetButton.addEventListener('mouseout', function () {
         this.style.backgroundColor = '#ff6b6b';
     });
 
-    resetButton.addEventListener('click', function() {
+    resetButton.addEventListener('click', function () {
         if (window.resetAllParameters) {
             resetAllParameters();
         }
@@ -72,16 +72,16 @@ function createControlsContainer(container) {
         transition: background-color 0.2s;
         flex: 1;
     `;
-    
-    saveButton.addEventListener('mouseover', function() {
+
+    saveButton.addEventListener('mouseover', function () {
         this.style.backgroundColor = '#45b7b8';
     });
-    
-    saveButton.addEventListener('mouseout', function() {
+
+    saveButton.addEventListener('mouseout', function () {
         this.style.backgroundColor = '#4ecdc4';
     });
 
-    saveButton.addEventListener('click', function() {
+    saveButton.addEventListener('click', function () {
         // Get the title from the parameter registry
         let fileTitle = 'sketch';
         if (window.parameterRegistry && window.parameterRegistry.title) {
@@ -94,14 +94,14 @@ function createControlsContainer(container) {
                     .toLowerCase();
             }
         }
-        
+
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
-        
+
         // Save canvas as PNG
         if (window.saveCanvas) {
             saveCanvas(`${fileTitle}-${timestamp}`, 'png');
         }
-        
+
         // Save parameters as JSON
         if (window.parameterRegistry) {
             const paramsData = {};
@@ -109,11 +109,11 @@ function createControlsContainer(container) {
                 const param = window.parameterRegistry[paramName];
                 paramsData[paramName] = param.getValue();
             });
-            
+
             const jsonData = JSON.stringify(paramsData, null, 2);
             const blob = new Blob([jsonData], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            
+
             const link = document.createElement('a');
             link.href = url;
             link.download = `${fileTitle}-params-${timestamp}.json`;
@@ -141,12 +141,12 @@ function createControlsContainer(container) {
         transition: background-color 0.2s;
         flex: 1;
     `;
-    
-    importButton.addEventListener('mouseover', function() {
+
+    importButton.addEventListener('mouseover', function () {
         this.style.backgroundColor = '#6c5ce7';
     });
-    
-    importButton.addEventListener('mouseout', function() {
+
+    importButton.addEventListener('mouseout', function () {
         this.style.backgroundColor = '#a29bfe';
     });
 
@@ -155,12 +155,12 @@ function createControlsContainer(container) {
     fileInput.type = 'file';
     fileInput.accept = '.json';
     fileInput.style.display = 'none';
-    
-    fileInput.addEventListener('change', function(event) {
+
+    fileInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 try {
                     const paramsData = JSON.parse(e.target.result);
                     loadParameterSettings(paramsData);
@@ -175,7 +175,7 @@ function createControlsContainer(container) {
         event.target.value = '';
     });
 
-    importButton.addEventListener('click', function() {
+    importButton.addEventListener('click', function () {
         fileInput.click();
     });
 

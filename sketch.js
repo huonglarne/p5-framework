@@ -11,6 +11,11 @@ function setup() {
 
     createParameterGroup(
         {
+            title: {
+                type: 'input',
+                default: "Sketch",
+                callback: function (value) { title = value; }
+            },
             width: {
                 type: 'range',
                 default: 400,
@@ -32,14 +37,9 @@ function setup() {
                     height = value;
                     resizeCanvas(width, height);
                 }
-            },
-            title: {
-                type: 'input',
-                default: "My Sketch",
-                callback: function (value) { title = value; }
             }
         },
-        "Canvas Settings"
+        "Artwork Settings"
     );
 
     createParameterGroup(

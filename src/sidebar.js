@@ -6,7 +6,7 @@ class Sidebar {
     this.sidebarClose = null;
     this.mainContent = null;
     this.isOpen = false;
-    
+
     this.init();
   }
 
@@ -19,7 +19,7 @@ class Sidebar {
 
     // Bind events
     this.bindEvents();
-    
+
     // Initialize controls in sidebar
     this.initializeControls();
   }
@@ -27,10 +27,10 @@ class Sidebar {
   initializeControls() {
     // Add controls to sidebar if createControlsContainer is available
     if (window.createControlsContainer) {
-        const sidebarContent = document.querySelector('.sidebar-content');
-        if (sidebarContent) {
-            window.createControlsContainer(sidebarContent);
-        }
+      const sidebarContent = document.querySelector('.sidebar-content');
+      if (sidebarContent) {
+        window.createControlsContainer(sidebarContent);
+      }
     }
   }
 
@@ -54,9 +54,9 @@ class Sidebar {
 
     // Close sidebar on outside click
     document.addEventListener('click', (e) => {
-      if (this.isOpen && 
-          !this.sidebar.contains(e.target) && 
-          !this.sidebarToggle.contains(e.target)) {
+      if (this.isOpen &&
+        !this.sidebar.contains(e.target) &&
+        !this.sidebarToggle.contains(e.target)) {
         this.close();
       }
     });
@@ -67,7 +67,7 @@ class Sidebar {
       this.sidebar.classList.add('open');
       this.mainContent.classList.add('sidebar-open');
       this.isOpen = true;
-      
+
       // Update toggle button text/icon
       if (this.sidebarToggle) {
         this.sidebarToggle.innerHTML = '✕';
@@ -81,7 +81,7 @@ class Sidebar {
       this.sidebar.classList.remove('open');
       this.mainContent.classList.remove('sidebar-open');
       this.isOpen = false;
-      
+
       // Update toggle button text/icon
       if (this.sidebarToggle) {
         this.sidebarToggle.innerHTML = '☰';
