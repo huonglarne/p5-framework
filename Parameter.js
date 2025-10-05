@@ -1,20 +1,15 @@
-// Base Parameter class
 class Parameter {
-    constructor(name, value, defaultValue) {
+    constructor(name, defaultValue, value = null) {
         this.name = name;
-        this.value = value;
-        this.default = defaultValue !== undefined ? defaultValue : value;
+        this.default = defaultValue;
+        this.value = value !== null ? value : defaultValue;
         this.controlElement = null;
         this.onChange = null;
         
-        // Store reference in global registry
         if (!window.parameterRegistry) {
             window.parameterRegistry = {};
         }
         window.parameterRegistry[name] = this;
-        
-        // Auto-create control when Parameter is instantiated
-        this.createControl();
     }
     
     createControl() {
@@ -63,10 +58,9 @@ class Parameter {
     }
 }
 
-// Range Parameter class
 class RangeParameter extends Parameter {
-    constructor(name, value, min, max, interval, defaultValue) {
-        super(name, value, defaultValue);
+    constructor(name, defaultValue, min, max, interval, value = null) {
+        super(name, defaultValue, value);
         this.min = min;
         this.max = max;
         this.interval = interval || 1;
@@ -82,6 +76,9 @@ class RangeParameter extends Parameter {
 
         const slider = document.createElement('input');
         slider.type = 'range';
+
+        print("Slider range: ", this.name, this.min, this.max, this.value);
+
         slider.min = this.min;
         slider.max = this.max;
         slider.value = this.value;
@@ -120,10 +117,9 @@ class RangeParameter extends Parameter {
     }
 }
 
-// Color Parameter class
 class ColorParameter extends Parameter {
-    constructor(name, value, defaultValue) {
-        super(name, value, defaultValue);
+    constructor(name, defaultValue, value = null) {
+        super(name, defaultValue, value);
     }
     
     createControlElement() {
@@ -137,7 +133,6 @@ class ColorParameter extends Parameter {
         const colorPicker = document.createElement('input');
         colorPicker.type = 'color';
         
-        // Convert RGB array to hex
         const rgbToHex = (r, g, b) => {
             return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         };
@@ -185,10 +180,9 @@ class ColorParameter extends Parameter {
     }
 }
 
-// Input Parameter class
 class InputParameter extends Parameter {
-    constructor(name, value, defaultValue, type = 'text') {
-        super(name, value, defaultValue);
+    constructor(name, defaultValue, type = 'text', value = null) {
+        super(name, defaultValue, value);
         this.inputType = type; // 'text', 'number', etc.
     }
     
@@ -235,8 +229,31 @@ class InputParameter extends Parameter {
 }
 
 
-function createParameterGroup(paramConfig) {
+function createParameterGroup(paramConfig, groupName = null) {
     const parameters = {};
+    
+    // Create a group container
+    const groupContainer = document.createElement('div');
+    groupContainer.style.cssText = 'border: 2px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;';
+    
+    // Add group title if provided
+    if (groupName) {
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = groupName;
+        titleElement.style.cssText = 'margin: 0 0 15px 0; padding: 0; font-size: 16px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 8px;';
+        groupContainer.appendChild(titleElement);
+    }
+    
+    // Wait for controls container and add the group container
+    const waitForContainer = () => {
+        const controlsContainer = document.getElementById('controls');
+        if (controlsContainer) {
+            controlsContainer.appendChild(groupContainer);
+        } else {
+            setTimeout(waitForContainer, 100);
+        }
+    };
+    waitForContainer();
     
     for (const [varName, config] of Object.entries(paramConfig)) {
         let param;
@@ -244,31 +261,38 @@ function createParameterGroup(paramConfig) {
         if (config.type === 'color') {
             param = new ColorParameter(
                 varName,
-                config.value,
-                config.default
+                config.default || config.value,
+                config.value
             );
         } else if (config.type === 'input' || config.type === 'text' || config.type === 'number') {
             param = new InputParameter(
                 varName,
-                config.value,
-                config.default,
-                config.type === 'number' ? 'number' : 'text'
+                config.default || config.value,
+                config.type === 'number' ? 'number' : 'text',
+                config.value
             );
-        } else {
-            // Default to range parameter
+        } else if (config.type === 'range' || ('min' in config && 'max' in config)) {
             param = new RangeParameter(
                 varName,
-                config.value,
+                config.default || config.value,
                 config.min,
                 config.max,
                 config.interval,
-                config.default
+                config.value
             );
         }
         
         if (config.callback) {
             param.setCallback(config.callback);
         }
+        
+        // Override the parameter's createControl method to add to this group
+        const originalCreateControl = param.createControl;
+        param.createControl = function() {
+            this.controlElement = this.createControlElement();
+            groupContainer.appendChild(this.controlElement);
+        };
+        param.createControl();
         
         parameters[varName] = param;
     }

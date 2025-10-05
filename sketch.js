@@ -8,47 +8,71 @@ let title = "My Sketch";
 
 function setup() {
     createCanvas(400, 400);
-    
-    background(255);
-    
-    createParameterGroup({
-        num_circles: {
-            value: 1, 
-            min: 1, 
-            max: 10, 
-            interval: 1, 
-            default: 1,
-            callback: function(value) { num_circles = value; }
+
+    createParameterGroup(
+        {
+            width: {
+                type: 'range',
+                default: 400,
+                min: 0,
+                max: 800,
+                interval: 10,
+                callback: function (value) {
+                    width = value;
+                    resizeCanvas(width, height);
+                }
+            },
+            height: {
+                type: 'range',
+                default: 400,
+                min: 0,
+                max: 800,
+                interval: 10,
+                callback: function (value) {
+                    height = value;
+                    resizeCanvas(width, height);
+                }
+            },
+            title: {
+                type: 'input',
+                default: "My Sketch",
+                callback: function (value) { title = value; }
+            }
         },
-        circle_size: {
-            value: 100, 
-            min: 10, 
-            max: 300, 
-            interval: 5, 
-            default: 100,
-            callback: function(value) { circle_size = value; }
+        "Canvas Settings"
+    );
+
+    createParameterGroup(
+        {
+            num_circles: {
+                type: 'range',
+                default: 1,
+                min: 1,
+                max: 5,
+                interval: 1,
+                callback: function (value) { num_circles = value; }
+            },
+            circle_size: {
+                type: 'range',
+                default: 100,
+                min: 10,
+                max: 300,
+                interval: 5,
+                callback: function (value) { circle_size = value; }
+            },
+            color: {
+                type: 'color',
+                default: [255, 60, 70],
+                callback: function (colorArray) { color = colorArray; }
+            }
         },
-        color: {
-            value: [255, 60, 70], 
-            min: 0, 
-            max: 255, 
-            interval: 1, 
-            default: [255, 60, 70],
-            type: 'color',
-            callback: function(colorArray) { color = colorArray; }
-        },
-        title: {
-            value: "My Sketch",
-            default: "My Sketch",
-            type: 'input',
-            callback: function(value) { title = value; }
-        }
-    });
+        "Main Parameters"
+    );
 }
 
 function draw() {
-    background(255);
-    
+    background(220);
+
     fill(color[0], color[1], color[2]);
     noStroke();
 
