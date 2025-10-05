@@ -1,23 +1,19 @@
-// Create controls container below the canvas
-function createControlsContainer() {
-    // Remove any existing controls container
+function createControlsContainer(container) {
     const existingControls = document.getElementById('controls');
     if (existingControls) {
         existingControls.remove();
     }
 
-    // Create the controls container
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls';
+    
     controlsContainer.style.cssText = `
-        position: absolute;
-        top: 420px;
-        left: 10px;
-        width: 380px;
+        width: 100%;
         background: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 8px;
         padding: 15px;
+        margin-bottom: 15px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         font-family: Arial, sans-serif;
     `;
@@ -47,6 +43,7 @@ function createControlsContainer() {
         font-weight: bold;
         margin-bottom: 15px;
         transition: background-color 0.2s;
+        width: 100%;
     `;
     
     resetButton.addEventListener('mouseover', function() {
@@ -202,8 +199,12 @@ function createControlsContainer() {
     // Add hidden file input to container
     controlsContainer.appendChild(fileInput);
 
-    // Add controls container to the page
-    document.body.appendChild(controlsContainer);
+    // Add controls container to the specified container or body
+    if (container) {
+        container.appendChild(controlsContainer);
+    } else {
+        document.body.appendChild(controlsContainer);
+    }
 
     return controlsContainer;
 }
@@ -274,17 +275,6 @@ function keyPressed() {
     }
 }
 
-// Make sure it's available globally
+// Make sure functions are available globally
 window.keyPressed = keyPressed;
-
-// Initialize controls when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    createControlsContainer();
-});
-
-// Also create controls immediately if DOM is already loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createControlsContainer);
-} else {
-    createControlsContainer();
-}
+window.createControlsContainer = createControlsContainer;

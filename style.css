@@ -1,8 +1,110 @@
 html, body {
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 canvas {
   display: block;
 }
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1001;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar-toggle:hover {
+  background: #555;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px; /* Hide off-screen initially */
+  width: 400px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  right: 0; /* Slide in from right */
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #e9ecef;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 0;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.sidebar-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.sidebar-close:hover {
+  background: #dee2e6;
+}
+
+/* Sidebar Content */
+.sidebar-content {
+  padding: 50px 20px 20px 20px; /* Top padding to avoid close button */
+}
+
+/* Main Content */
+#main-content {
+  transition: margin-right 0.3s ease;
+}
+
+#main-content.sidebar-open {
+  margin-right: 400px; /* Push content left when sidebar is open */
+}
+
+/* Override parameter group styles for sidebar */
+/* .sidebar .parameter-group {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: white;
+} */
