@@ -58,7 +58,7 @@ class RangeParameter extends Parameter {
 
         const labelElement = document.createElement('label');
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
 
         const slider = document.createElement('input');
         slider.type = 'range';
@@ -71,7 +71,7 @@ class RangeParameter extends Parameter {
 
         const valueDisplay = document.createElement('span');
         valueDisplay.textContent = this.value;
-        valueDisplay.style.cssText = 'font-weight: bold; color: #333;';
+        valueDisplay.style.cssText = 'font-weight: bold; color: #333; font-size: 11px;';
 
         const self = this;
         slider.addEventListener('input', function () {
@@ -112,7 +112,7 @@ class ColorParameter extends Parameter {
 
         const labelElement = document.createElement('label');
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
 
         const colorPicker = document.createElement('input');
         colorPicker.type = 'color';
@@ -126,7 +126,7 @@ class ColorParameter extends Parameter {
 
         const rgbDisplay = document.createElement('span');
         rgbDisplay.textContent = `RGB(${this.value[0]}, ${this.value[1]}, ${this.value[2]})`;
-        rgbDisplay.style.cssText = 'margin-left: 10px; font-weight: bold; color: #333;';
+        rgbDisplay.style.cssText = 'margin-left: 10px; font-weight: bold; color: #333; font-size: 11px;';
 
         const self = this;
         colorPicker.addEventListener('input', function () {
@@ -176,12 +176,12 @@ class InputParameter extends Parameter {
 
         const labelElement = document.createElement('label');
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold;';
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
 
         const input = document.createElement('input');
         input.type = this.inputType;
         input.value = this.value;
-        input.style.cssText = 'width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin: 0 10px;';
+        input.style.cssText = 'width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin: 0 10px; font-size: 11px;';
 
         const self = this;
         input.addEventListener('input', function () {
@@ -224,7 +224,7 @@ function createParameterGroup(paramConfig, groupName = null) {
     if (groupName) {
         const titleElement = document.createElement('h3');
         titleElement.textContent = groupName;
-        titleElement.style.cssText = 'margin: 0 0 15px 0; padding: 0; font-size: 16px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 8px;';
+        titleElement.style.cssText = 'margin: 0 0 15px 0; padding: 0; font-size: 13px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 8px;';
         groupContainer.appendChild(titleElement);
     }
 

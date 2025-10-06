@@ -32,8 +32,8 @@ canvas {
 .sidebar {
   position: fixed;
   top: 0;
-  right: -400px; /* Hide off-screen initially */
-  width: 400px;
+  right: -350px; /* Hide off-screen initially */
+  width: 350px;
   height: 100vh;
   background: white;
   box-shadow: -2px 0 5px rgba(0,0,0,0.1);
@@ -88,7 +88,7 @@ canvas {
 
 /* Sidebar Content */
 .sidebar-content {
-  padding: 50px 20px 20px 20px; /* Top padding to avoid close button */
+  padding: 80px 10px 10px 10px; /* Top padding to avoid close button */
 }
 
 /* Main Content */
@@ -97,14 +97,5 @@ canvas {
 }
 
 #main-content.sidebar-open {
-  margin-right: 400px; /* Push content left when sidebar is open */
+  margin-right: 350px; /* Push content left when sidebar is open */
 }
-
-/* Override parameter group styles for sidebar */
-/* .sidebar .parameter-group {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 15px;
-  background-color: white;
-} */

@@ -3,7 +3,6 @@ class Sidebar {
   constructor() {
     this.sidebar = null;
     this.sidebarToggle = null;
-    this.sidebarClose = null;
     this.mainContent = null;
     this.isOpen = false;
 
@@ -14,7 +13,6 @@ class Sidebar {
     // Get DOM elements
     this.sidebar = document.querySelector('.sidebar');
     this.sidebarToggle = document.querySelector('.sidebar-toggle');
-    this.sidebarClose = document.querySelector('.sidebar-close');
     this.mainContent = document.querySelector('#main-content');
 
     // Bind events
@@ -38,11 +36,6 @@ class Sidebar {
     // Toggle sidebar on button click
     if (this.sidebarToggle) {
       this.sidebarToggle.addEventListener('click', () => this.toggle());
-    }
-
-    // Close sidebar on close button click
-    if (this.sidebarClose) {
-      this.sidebarClose.addEventListener('click', () => this.close());
     }
 
     // Close sidebar on escape key

@@ -8,14 +8,15 @@ function createControlsContainer(container) {
     controlsContainer.id = 'controls';
 
     controlsContainer.style.cssText = `
-        width: 100%;
+        width: 93%;
         background: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
+        padding: 10px;
+        margin-bottom: 10px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         font-family: Arial, sans-serif;
+        font-size: 12px;
     `;
 
     // Create reset button
@@ -25,13 +26,14 @@ function createControlsContainer(container) {
         background: #ff6b6b;
         color: white;
         border: none;
-        padding: 8px 16px;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
         font-weight: bold;
         margin-bottom: 15px;
         transition: background-color 0.2s;
         width: 100%;
+        font-size: 14px;
     `;
 
     resetButton.addEventListener('mouseover', function () {
@@ -65,12 +67,13 @@ function createControlsContainer(container) {
         background: #4ecdc4;
         color: white;
         border: none;
-        padding: 8px 16px;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
         font-weight: bold;
         transition: background-color 0.2s;
         flex: 1;
+        font-size: 14px;
     `;
 
     saveButton.addEventListener('mouseover', function () {
@@ -116,7 +119,7 @@ function createControlsContainer(container) {
 
             const link = document.createElement('a');
             link.href = url;
-            link.download = `${fileTitle}-params-${timestamp}.json`;
+            link.download = `${fileTitle}-${timestamp}.json`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -134,12 +137,13 @@ function createControlsContainer(container) {
         background: #a29bfe;
         color: white;
         border: none;
-        padding: 8px 16px;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
         font-weight: bold;
         transition: background-color 0.2s;
         flex: 1;
+        font-size: 14px;
     `;
 
     importButton.addEventListener('mouseover', function () {
