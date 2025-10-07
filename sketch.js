@@ -4,13 +4,16 @@ let canvas_width = DEFAULT_CANVAS_WIDTH;
 let DEFAULT_CANVAS_HEIGHT = 400;
 let canvas_height = DEFAULT_CANVAS_HEIGHT;
 
+let DEFAULT_RANDOM_SEED = 1;
+let random_seed = DEFAULT_RANDOM_SEED;
+
 let DEFAULT_TITLE = "Sketch";
 let title = DEFAULT_TITLE;
 
-let DEFAULT_N_ROWS = 3;
+let DEFAULT_N_ROWS = 6;
 let n_rows = DEFAULT_N_ROWS;
 
-let DEFAULT_N_COLS = 3;
+let DEFAULT_N_COLS = 6;
 let n_cols = DEFAULT_N_COLS;
 
 let DEFAULT_CIRCLE_RADIUS = 20;
@@ -27,6 +30,8 @@ let grid;
 function setup() {
     createCanvas(canvas_width, canvas_height);
 
+    randomSeed(random_seed);
+
     grid = prettyGrid.createGrid(
         {
             rows: n_rows,
@@ -36,8 +41,21 @@ function setup() {
         }
     )
 
+    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+
     createParameterGroup(
         {
+            seed: {
+                type: RANDOM_PARAMETER,
+                default: DEFAULT_RANDOM_SEED,
+                min: 1,
+                max: 1000,
+                callback: function (value) {
+                    random_seed = value;
+                    randomSeed(random_seed);
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+                }
+            },
             title: {
                 type: INPUT_PARAMETER,
                 default: DEFAULT_TITLE,
@@ -58,6 +76,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             },
             canvas_height: {
@@ -75,6 +94,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             },
             horizontal_padding: {
@@ -91,6 +111,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             },
             vertical_padding: {
@@ -107,6 +128,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             }
         },
@@ -129,6 +151,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             },
             n_cols: {
@@ -145,6 +168,7 @@ function setup() {
                         width: canvas_width - (horizontal_padding * 2),
                         height: canvas_height - (vertical_padding * 2)
                     });
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
                 }
             }
         },
@@ -159,7 +183,10 @@ function setup() {
                 min: 1,
                 max: 100,
                 interval: 1,
-                callback: function (value) { circle_radius = value; }
+                callback: function (value) {
+                    circle_radius = value;
+                    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+                }
             },
         },
         "Display Settings"
@@ -174,6 +201,8 @@ function drawWithPadding(horizontal_padding, vertical_padding, drawCallback) {
 }
 
 function main_draw() {
+    background(50);
+
     let points = grid.getPoints();
 
     stroke(225);
@@ -181,23 +210,30 @@ function main_draw() {
     print("rows: " + points.length);
     print("cols: " + points[0].length);
 
-    for (let i = 0; i < points.length-1; i++) {
+    for (let i = 0; i < points.length - 1; i++) {
         print("i: " + i);
-        for (let j = 0; j < points[i].length-1; j++) {
+        for (let j = 0; j < points[i].length - 1; j++) {
             print("j: " + j);
-            start_point = points[i][j];
-            end_point = points[i+1][j+1];
-            print("Start Point: ")
-            print(start_point);
-            print("End Point: ")
-            print(end_point);
+
+            probability = random(0, 1);
+
+            if (probability < 0.5) {
+                start_point = points[i][j + 1];
+                end_point = points[i + 1][j];
+            }
+
+            else if (probability >= 0.5) {
+                start_point = points[i][j];
+                end_point = points[i + 1][j + 1];
+            }
+
             line(start_point.x, start_point.y, end_point.x, end_point.y);
         }
     }
 
-    // noFill();
+    noFill();
 
-    fill(50)
+    // fill(50);
 
     grid.draw(
         (point) => {
@@ -207,10 +243,10 @@ function main_draw() {
 }
 
 function draw() {
-    background(50);
+    // background(50);
 
-    frameRate(20);
+    frameRate(1);
     // noLoop();
 
-    drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+    // drawWithPadding(horizontal_padding, vertical_padding, main_draw);
 }

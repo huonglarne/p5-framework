@@ -212,6 +212,92 @@ class InputParameter extends Parameter {
     }
 }
 
+class RandomParameter extends Parameter {
+    constructor(name, defaultValue, min = 0, max = 100, value = null) {
+        super(name, defaultValue, value);
+        this.min = min;
+        this.max = max;
+    }
+
+    createControlElement() {
+        const container = document.createElement('div');
+        container.style.marginBottom = '15px';
+
+        const labelElement = document.createElement('label');
+        labelElement.textContent = `${this.name}`;
+        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
+
+        const inputContainer = document.createElement('div');
+        inputContainer.style.cssText = 'display: flex; align-items: center; gap: 10px;';
+
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.value = this.value;
+        input.style.cssText = 'width: 100px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px;';
+
+        const randomButton = document.createElement('button');
+        randomButton.textContent = 'Random';
+        randomButton.style.cssText = 'padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;';
+
+        const rangeDisplay = document.createElement('span');
+        rangeDisplay.textContent = `(${this.min} - ${this.max})`;
+        rangeDisplay.style.cssText = 'font-size: 10px; color: #666; margin-left: 5px;';
+
+        const self = this;
+
+        // Input change handler
+        input.addEventListener('input', function () {
+            let value = parseFloat(this.value) || 0;
+            
+            // Clamp value to min/max range
+            value = Math.max(self.min, Math.min(self.max, value));
+            this.value = value;
+            
+            self.value = value;
+            if (self.onChange) {
+                self.onChange(value);
+            }
+        });
+
+        // Random button click handler
+        randomButton.addEventListener('click', function () {
+            const randomValue = Math.random() * (self.max - self.min) + self.min;
+            const roundedValue = Math.round(randomValue * 100) / 100; // Round to 2 decimal places
+            
+            input.value = roundedValue;
+            self.value = roundedValue;
+            
+            if (self.onChange) {
+                self.onChange(roundedValue);
+            }
+        });
+
+        // Hover effects for button
+        randomButton.addEventListener('mouseenter', function () {
+            this.style.backgroundColor = '#005a9e';
+        });
+
+        randomButton.addEventListener('mouseleave', function () {
+            this.style.backgroundColor = '#007acc';
+        });
+
+        inputContainer.appendChild(input);
+        inputContainer.appendChild(randomButton);
+        inputContainer.appendChild(rangeDisplay);
+
+        container.appendChild(labelElement);
+        container.appendChild(inputContainer);
+
+        return container;
+    }
+
+    updateControlDisplay() {
+        if (this.controlElement) {
+            const input = this.controlElement.querySelector('input[type="number"]');
+            input.value = this.value;
+        }
+    }
+}
 
 function createParameterGroup(paramConfig, groupName = null) {
     const parameters = {};
@@ -262,6 +348,14 @@ function createParameterGroup(paramConfig, groupName = null) {
                 config.min,
                 config.max,
                 config.interval,
+                config.value
+            );
+        } else if (config.type === RANDOM_PARAMETER) {
+            param = new RandomParameter(
+                varName,
+                config.default || config.value,
+                config.min || 0,
+                config.max || 100,
                 config.value
             );
         }
