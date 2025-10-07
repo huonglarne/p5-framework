@@ -1,11 +1,11 @@
 function createControlsContainer(container) {
-    const existingControls = document.getElementById('controls');
+    const existingControls = document.getElementById("controls");
     if (existingControls) {
         existingControls.remove();
     }
 
-    const controlsContainer = document.createElement('div');
-    controlsContainer.id = 'controls';
+    const controlsContainer = document.createElement("div");
+    controlsContainer.id = "controls";
 
     controlsContainer.style.cssText = `
         width: 93%;
@@ -20,8 +20,8 @@ function createControlsContainer(container) {
     `;
 
     // Create reset button
-    const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset Settings (R)';
+    const resetButton = document.createElement("button");
+    resetButton.textContent = "Reset Settings (R)";
     resetButton.style.cssText = `
         background: #ff6b6b;
         color: white;
@@ -36,15 +36,15 @@ function createControlsContainer(container) {
         font-size: 14px;
     `;
 
-    resetButton.addEventListener('mouseover', function () {
-        this.style.backgroundColor = '#ff5252';
+    resetButton.addEventListener("mouseover", function () {
+        this.style.backgroundColor = "#ff5252";
     });
 
-    resetButton.addEventListener('mouseout', function () {
-        this.style.backgroundColor = '#ff6b6b';
+    resetButton.addEventListener("mouseout", function () {
+        this.style.backgroundColor = "#ff6b6b";
     });
 
-    resetButton.addEventListener('click', function () {
+    resetButton.addEventListener("click", function () {
         if (window.resetAllParameters) {
             resetAllParameters();
         }
@@ -53,7 +53,7 @@ function createControlsContainer(container) {
     controlsContainer.appendChild(resetButton);
 
     // Create button container for better layout
-    const buttonContainer = document.createElement('div');
+    const buttonContainer = document.createElement("div");
     buttonContainer.style.cssText = `
         display: flex;
         gap: 10px;
@@ -61,8 +61,8 @@ function createControlsContainer(container) {
     `;
 
     // Create save button
-    const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
+    const saveButton = document.createElement("button");
+    saveButton.textContent = "Save";
     saveButton.style.cssText = `
         background: #4ecdc4;
         color: white;
@@ -76,48 +76,52 @@ function createControlsContainer(container) {
         font-size: 14px;
     `;
 
-    saveButton.addEventListener('mouseover', function () {
-        this.style.backgroundColor = '#45b7b8';
+    saveButton.addEventListener("mouseover", function () {
+        this.style.backgroundColor = "#45b7b8";
     });
 
-    saveButton.addEventListener('mouseout', function () {
-        this.style.backgroundColor = '#4ecdc4';
+    saveButton.addEventListener("mouseout", function () {
+        this.style.backgroundColor = "#4ecdc4";
     });
 
-    saveButton.addEventListener('click', function () {
+    saveButton.addEventListener("click", function () {
         // Get the title from the parameter registry
-        let fileTitle = 'sketch';
+        let fileTitle = "sketch";
         if (window.parameterRegistry && window.parameterRegistry.title) {
             const titleValue = window.parameterRegistry.title.getValue();
             if (titleValue && titleValue.trim()) {
                 // Clean the title for use in filename (remove invalid characters)
-                fileTitle = titleValue.trim()
-                    .replace(/[<>:"/\\|?*]/g, '') // Remove invalid filename characters
-                    .replace(/\s+/g, '-') // Replace spaces with hyphens
+                fileTitle = titleValue
+                    .trim()
+                    .replace(/[<>:"/\\|?*]/g, "") // Remove invalid filename characters
+                    .replace(/\s+/g, "-") // Replace spaces with hyphens
                     .toLowerCase();
             }
         }
 
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+        const timestamp = new Date()
+            .toISOString()
+            .replace(/[:.]/g, "-")
+            .slice(0, -5);
 
         // Save canvas as PNG
         if (window.saveCanvas) {
-            saveCanvas(`${fileTitle}-${timestamp}`, 'png');
+            saveCanvas(`${fileTitle}-${timestamp}`, "png");
         }
 
         // Save parameters as JSON
         if (window.parameterRegistry) {
             const paramsData = {};
-            Object.keys(window.parameterRegistry).forEach(paramName => {
+            Object.keys(window.parameterRegistry).forEach((paramName) => {
                 const param = window.parameterRegistry[paramName];
                 paramsData[paramName] = param.getValue();
             });
 
             const jsonData = JSON.stringify(paramsData, null, 2);
-            const blob = new Blob([jsonData], { type: 'application/json' });
+            const blob = new Blob([jsonData], { type: "application/json" });
             const url = URL.createObjectURL(blob);
 
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = url;
             link.download = `${fileTitle}-${timestamp}.json`;
             document.body.appendChild(link);
@@ -125,14 +129,14 @@ function createControlsContainer(container) {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         } else {
-            console.warn('No parameters found to save');
-            alert('No parameters available to save');
+            console.warn("No parameters found to save");
+            alert("No parameters available to save");
         }
     });
 
     // Create import button
-    const importButton = document.createElement('button');
-    importButton.textContent = 'Load Settings';
+    const importButton = document.createElement("button");
+    importButton.textContent = "Load Settings";
     importButton.style.cssText = `
         background: #a29bfe;
         color: white;
@@ -146,21 +150,21 @@ function createControlsContainer(container) {
         font-size: 14px;
     `;
 
-    importButton.addEventListener('mouseover', function () {
-        this.style.backgroundColor = '#6c5ce7';
+    importButton.addEventListener("mouseover", function () {
+        this.style.backgroundColor = "#6c5ce7";
     });
 
-    importButton.addEventListener('mouseout', function () {
-        this.style.backgroundColor = '#a29bfe';
+    importButton.addEventListener("mouseout", function () {
+        this.style.backgroundColor = "#a29bfe";
     });
 
     // Create hidden file input for import
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.json';
-    fileInput.style.display = 'none';
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".json";
+    fileInput.style.display = "none";
 
-    fileInput.addEventListener('change', function (event) {
+    fileInput.addEventListener("change", function (event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -169,17 +173,17 @@ function createControlsContainer(container) {
                     const paramsData = JSON.parse(e.target.result);
                     loadParameterSettings(paramsData);
                 } catch (error) {
-                    alert('Error loading settings: Invalid JSON file');
-                    console.error('Import error:', error);
+                    alert("Error loading settings: Invalid JSON file");
+                    console.error("Import error:", error);
                 }
             };
             reader.readAsText(file);
         }
         // Reset file input to allow selecting the same file again
-        event.target.value = '';
+        event.target.value = "";
     });
 
-    importButton.addEventListener('click', function () {
+    importButton.addEventListener("click", function () {
         fileInput.click();
     });
 
@@ -204,7 +208,7 @@ function createControlsContainer(container) {
 // Function to load parameter settings from imported data
 function loadParameterSettings(paramsData) {
     if (!window.parameterRegistry) {
-        console.warn('No parameter registry found');
+        console.warn("No parameter registry found");
         return;
     }
 
@@ -231,13 +235,13 @@ function loadParameterSettings(paramsData) {
 
     // Show feedback to user
     if (loadedCount <= 0) {
-        alert('No matching parameters found in the settings file');
+        alert("No matching parameters found in the settings file");
     }
 }
 
 // Keyboard shortcut handler
 function keyPressed() {
-    if (key === 'r' || key === 'R') {
+    if (key === "r" || key === "R") {
         resetAllParameters();
     }
 }

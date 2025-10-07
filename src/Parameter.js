@@ -14,7 +14,9 @@ class Parameter {
 
     // Abstract method - to be implemented by subclasses
     createControlElement() {
-        throw new Error('createControlElement must be implemented by subclasses');
+        throw new Error(
+            "createControlElement must be implemented by subclasses",
+        );
     }
 
     getValue() {
@@ -28,7 +30,9 @@ class Parameter {
 
     // Abstract method - to be implemented by subclasses
     updateControlDisplay() {
-        throw new Error('updateControlDisplay must be implemented by subclasses');
+        throw new Error(
+            "updateControlDisplay must be implemented by subclasses",
+        );
     }
 
     reset() {
@@ -53,28 +57,30 @@ class RangeParameter extends Parameter {
     }
 
     createControlElement() {
-        const container = document.createElement('div');
-        container.style.marginBottom = '15px';
+        const container = document.createElement("div");
+        container.style.marginBottom = "15px";
 
-        const labelElement = document.createElement('label');
+        const labelElement = document.createElement("label");
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
+        labelElement.style.cssText =
+            "display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;";
 
-        const slider = document.createElement('input');
-        slider.type = 'range';
+        const slider = document.createElement("input");
+        slider.type = "range";
 
         slider.min = this.min;
         slider.max = this.max;
         slider.value = this.value;
         slider.step = this.interval;
-        slider.style.cssText = 'width: 200px; margin: 0 10px;';
+        slider.style.cssText = "width: 200px; margin: 0 10px;";
 
-        const valueDisplay = document.createElement('span');
+        const valueDisplay = document.createElement("span");
         valueDisplay.textContent = this.value;
-        valueDisplay.style.cssText = 'font-weight: bold; color: #333; font-size: 11px;';
+        valueDisplay.style.cssText =
+            "font-weight: bold; color: #333; font-size: 11px;";
 
         const self = this;
-        slider.addEventListener('input', function () {
+        slider.addEventListener("input", function () {
             const value = parseFloat(this.value);
             valueDisplay.textContent = value;
             self.value = value;
@@ -92,8 +98,10 @@ class RangeParameter extends Parameter {
 
     updateControlDisplay() {
         if (this.controlElement) {
-            const slider = this.controlElement.querySelector('input[type="range"]');
-            const valueDisplay = this.controlElement.querySelector('span');
+            const slider = this.controlElement.querySelector(
+                'input[type="range"]',
+            );
+            const valueDisplay = this.controlElement.querySelector("span");
 
             slider.value = this.value;
             valueDisplay.textContent = this.value;
@@ -107,29 +115,39 @@ class ColorParameter extends Parameter {
     }
 
     createControlElement() {
-        const container = document.createElement('div');
-        container.style.marginBottom = '15px';
+        const container = document.createElement("div");
+        container.style.marginBottom = "15px";
 
-        const labelElement = document.createElement('label');
+        const labelElement = document.createElement("label");
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
+        labelElement.style.cssText =
+            "display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;";
 
-        const colorPicker = document.createElement('input');
-        colorPicker.type = 'color';
+        const colorPicker = document.createElement("input");
+        colorPicker.type = "color";
 
         const rgbToHex = (r, g, b) => {
-            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            return (
+                "#" +
+                ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+            );
         };
 
-        colorPicker.value = rgbToHex(this.value[0], this.value[1], this.value[2]);
-        colorPicker.style.cssText = 'width: 50px; height: 30px; border: none; border-radius: 4px; cursor: pointer;';
+        colorPicker.value = rgbToHex(
+            this.value[0],
+            this.value[1],
+            this.value[2],
+        );
+        colorPicker.style.cssText =
+            "width: 50px; height: 30px; border: none; border-radius: 4px; cursor: pointer;";
 
-        const rgbDisplay = document.createElement('span');
+        const rgbDisplay = document.createElement("span");
         rgbDisplay.textContent = `RGB(${this.value[0]}, ${this.value[1]}, ${this.value[2]})`;
-        rgbDisplay.style.cssText = 'margin-left: 10px; font-weight: bold; color: #333; font-size: 11px;';
+        rgbDisplay.style.cssText =
+            "margin-left: 10px; font-weight: bold; color: #333; font-size: 11px;";
 
         const self = this;
-        colorPicker.addEventListener('input', function () {
+        colorPicker.addEventListener("input", function () {
             const hex = this.value;
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
@@ -151,44 +169,55 @@ class ColorParameter extends Parameter {
 
     updateControlDisplay() {
         if (this.controlElement) {
-            const colorPicker = this.controlElement.querySelector('input[type="color"]');
-            const rgbDisplay = this.controlElement.querySelector('span');
+            const colorPicker = this.controlElement.querySelector(
+                'input[type="color"]',
+            );
+            const rgbDisplay = this.controlElement.querySelector("span");
 
             const rgbToHex = (r, g, b) => {
-                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                return (
+                    "#" +
+                    ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+                );
             };
 
-            colorPicker.value = rgbToHex(this.value[0], this.value[1], this.value[2]);
+            colorPicker.value = rgbToHex(
+                this.value[0],
+                this.value[1],
+                this.value[2],
+            );
             rgbDisplay.textContent = `RGB(${this.value[0]}, ${this.value[1]}, ${this.value[2]})`;
         }
     }
 }
 
 class InputParameter extends Parameter {
-    constructor(name, defaultValue, type = 'text', value = null) {
+    constructor(name, defaultValue, type = "text", value = null) {
         super(name, defaultValue, value);
         this.inputType = type; // 'text', 'number', etc.
     }
 
     createControlElement() {
-        const container = document.createElement('div');
-        container.style.marginBottom = '15px';
+        const container = document.createElement("div");
+        container.style.marginBottom = "15px";
 
-        const labelElement = document.createElement('label');
+        const labelElement = document.createElement("label");
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
+        labelElement.style.cssText =
+            "display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;";
 
-        const input = document.createElement('input');
+        const input = document.createElement("input");
         input.type = this.inputType;
         input.value = this.value;
-        input.style.cssText = 'width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin: 0 10px; font-size: 11px;';
+        input.style.cssText =
+            "width: 200px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin: 0 10px; font-size: 11px;";
 
         const self = this;
-        input.addEventListener('input', function () {
+        input.addEventListener("input", function () {
             let value = this.value;
 
             // Convert to number if it's a number input
-            if (self.inputType === 'number') {
+            if (self.inputType === "number") {
                 value = parseFloat(value) || 0;
             }
 
@@ -206,7 +235,7 @@ class InputParameter extends Parameter {
 
     updateControlDisplay() {
         if (this.controlElement) {
-            const input = this.controlElement.querySelector('input');
+            const input = this.controlElement.querySelector("input");
             input.value = this.value;
         }
     }
@@ -220,39 +249,44 @@ class RandomParameter extends Parameter {
     }
 
     createControlElement() {
-        const container = document.createElement('div');
-        container.style.marginBottom = '15px';
+        const container = document.createElement("div");
+        container.style.marginBottom = "15px";
 
-        const labelElement = document.createElement('label');
+        const labelElement = document.createElement("label");
         labelElement.textContent = `${this.name}`;
-        labelElement.style.cssText = 'display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;';
+        labelElement.style.cssText =
+            "display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px;";
 
-        const inputContainer = document.createElement('div');
-        inputContainer.style.cssText = 'display: flex; align-items: center; gap: 10px;';
+        const inputContainer = document.createElement("div");
+        inputContainer.style.cssText =
+            "display: flex; align-items: center; gap: 10px;";
 
-        const input = document.createElement('input');
-        input.type = 'number';
+        const input = document.createElement("input");
+        input.type = "number";
         input.value = this.value;
-        input.style.cssText = 'width: 100px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px;';
+        input.style.cssText =
+            "width: 100px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 11px;";
 
-        const randomButton = document.createElement('button');
-        randomButton.textContent = 'Random';
-        randomButton.style.cssText = 'padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;';
+        const randomButton = document.createElement("button");
+        randomButton.textContent = "Random";
+        randomButton.style.cssText =
+            "padding: 5px 10px; background-color: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;";
 
-        const rangeDisplay = document.createElement('span');
+        const rangeDisplay = document.createElement("span");
         rangeDisplay.textContent = `(${this.min} - ${this.max})`;
-        rangeDisplay.style.cssText = 'font-size: 10px; color: #666; margin-left: 5px;';
+        rangeDisplay.style.cssText =
+            "font-size: 10px; color: #666; margin-left: 5px;";
 
         const self = this;
 
         // Input change handler
-        input.addEventListener('input', function () {
+        input.addEventListener("input", function () {
             let value = parseFloat(this.value) || 0;
-            
+
             // Clamp value to min/max range
             value = Math.max(self.min, Math.min(self.max, value));
             this.value = value;
-            
+
             self.value = value;
             if (self.onChange) {
                 self.onChange(value);
@@ -260,25 +294,26 @@ class RandomParameter extends Parameter {
         });
 
         // Random button click handler
-        randomButton.addEventListener('click', function () {
-            const randomValue = Math.random() * (self.max - self.min) + self.min;
+        randomButton.addEventListener("click", function () {
+            const randomValue =
+                Math.random() * (self.max - self.min) + self.min;
             const roundedValue = Math.round(randomValue * 100) / 100; // Round to 2 decimal places
-            
+
             input.value = roundedValue;
             self.value = roundedValue;
-            
+
             if (self.onChange) {
                 self.onChange(roundedValue);
             }
         });
 
         // Hover effects for button
-        randomButton.addEventListener('mouseenter', function () {
-            this.style.backgroundColor = '#005a9e';
+        randomButton.addEventListener("mouseenter", function () {
+            this.style.backgroundColor = "#005a9e";
         });
 
-        randomButton.addEventListener('mouseleave', function () {
-            this.style.backgroundColor = '#007acc';
+        randomButton.addEventListener("mouseleave", function () {
+            this.style.backgroundColor = "#007acc";
         });
 
         inputContainer.appendChild(input);
@@ -293,7 +328,9 @@ class RandomParameter extends Parameter {
 
     updateControlDisplay() {
         if (this.controlElement) {
-            const input = this.controlElement.querySelector('input[type="number"]');
+            const input = this.controlElement.querySelector(
+                'input[type="number"]',
+            );
             input.value = this.value;
         }
     }
@@ -303,20 +340,22 @@ function createParameterGroup(paramConfig, groupName = null) {
     const parameters = {};
 
     // Create a group container
-    const groupContainer = document.createElement('div');
-    groupContainer.style.cssText = 'border: 2px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;';
+    const groupContainer = document.createElement("div");
+    groupContainer.style.cssText =
+        "border: 2px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;";
 
     // Add group title if provided
     if (groupName) {
-        const titleElement = document.createElement('h3');
+        const titleElement = document.createElement("h3");
         titleElement.textContent = groupName;
-        titleElement.style.cssText = 'margin: 0 0 15px 0; padding: 0; font-size: 13px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 8px;';
+        titleElement.style.cssText =
+            "margin: 0 0 15px 0; padding: 0; font-size: 13px; font-weight: bold; color: #333; border-bottom: 1px solid #ccc; padding-bottom: 8px;";
         groupContainer.appendChild(titleElement);
     }
 
     // Wait for controls container and add the group container
     const waitForContainer = () => {
-        const controlsContainer = document.getElementById('controls');
+        const controlsContainer = document.getElementById("controls");
         if (controlsContainer) {
             controlsContainer.appendChild(groupContainer);
         } else {
@@ -332,14 +371,14 @@ function createParameterGroup(paramConfig, groupName = null) {
             param = new ColorParameter(
                 varName,
                 config.default || config.value,
-                config.value
+                config.value,
             );
         } else if (config.type === INPUT_PARAMETER) {
             param = new InputParameter(
                 varName,
                 config.default || config.value,
-                config.type === 'number' ? 'number' : 'text',
-                config.value
+                config.type === "number" ? "number" : "text",
+                config.value,
             );
         } else if (config.type === RANGE_PARAMETER) {
             param = new RangeParameter(
@@ -348,7 +387,7 @@ function createParameterGroup(paramConfig, groupName = null) {
                 config.min,
                 config.max,
                 config.interval,
-                config.value
+                config.value,
             );
         } else if (config.type === RANDOM_PARAMETER) {
             param = new RandomParameter(
@@ -356,7 +395,7 @@ function createParameterGroup(paramConfig, groupName = null) {
                 config.default || config.value,
                 config.min || 0,
                 config.max || 100,
-                config.value
+                config.value,
             );
         }
 
@@ -376,7 +415,7 @@ function createParameterGroup(paramConfig, groupName = null) {
 
 function resetAllParameters() {
     if (window.parameterRegistry) {
-        Object.values(window.parameterRegistry).forEach(param => {
+        Object.values(window.parameterRegistry).forEach((param) => {
             param.reset();
         });
     }
