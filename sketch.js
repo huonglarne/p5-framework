@@ -10,13 +10,13 @@ let random_seed = DEFAULT_RANDOM_SEED;
 let DEFAULT_TITLE = "Sketch";
 let title = DEFAULT_TITLE;
 
-let DEFAULT_N_ROWS = 6;
+let DEFAULT_N_ROWS = 20;
 let n_rows = DEFAULT_N_ROWS;
 
-let DEFAULT_N_COLS = 6;
+let DEFAULT_N_COLS = 20;
 let n_cols = DEFAULT_N_COLS;
 
-let DEFAULT_CIRCLE_RADIUS = 20;
+let DEFAULT_CIRCLE_RADIUS = 10;
 let circle_radius = DEFAULT_CIRCLE_RADIUS;
 
 let DEFAULT_HORIZONTAL_PADDING = 40;
@@ -193,13 +193,6 @@ function setup() {
     );
 }
 
-function drawWithPadding(horizontal_padding, vertical_padding, drawCallback) {
-    push();
-    translate(horizontal_padding, vertical_padding);
-    drawCallback();
-    pop();
-}
-
 function main_draw() {
     background(50);
 
@@ -231,22 +224,21 @@ function main_draw() {
         }
     }
 
-    noFill();
-
-    // fill(50);
+    // noFill();
+    fill(50)
 
     grid.draw(
         (point) => {
-            circle(point.x, point.y, circle_radius);
+            probability = random(0, 1);
+
+            if (probability < 0.5) {
+                circle(point.x, point.y, circle_radius);
+            }
+            
         }
     );
 }
 
 function draw() {
-    // background(50);
-
     frameRate(1);
-    // noLoop();
-
-    // drawWithPadding(horizontal_padding, vertical_padding, main_draw);
 }

@@ -1,0 +1,11 @@
+{
+  "seed": 117.09,
+  "title": "Sketch",
+  "canvas_width": 500,
+  "canvas_height": 500,
+  "horizontal_padding": 100,
+  "vertical_padding": 100,
+  "n_rows": 20,
+  "n_cols": 20,
+  "circle_radius": 11
+}
