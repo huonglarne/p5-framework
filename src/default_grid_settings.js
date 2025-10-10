@@ -110,6 +110,18 @@ function create_default_grid_settings(main_draw, options = {}) {
           main_draw();
         },
       },
+      flex_grid_to_canvas: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "flex_grid_to_canvas",
+          "default",
+          DEFAULT_FLEX_GRID_TO_CANVAS,
+        ),
+        callback: function (value) {
+          flex_grid_to_canvas = value;
+          main_draw();
+        },
+      },
       grid_color: {
         type: COLOR_PARAMETER,
         default: get("grid_color", "default", DEFAULT_GRID_COLOR),
@@ -137,18 +149,6 @@ function create_default_grid_settings(main_draw, options = {}) {
         interval: 1,
         callback: function (value) {
           n_rows = value;
-          main_draw();
-        },
-      },
-      flex_grid_to_canvas: {
-        type: BOOLEAN_PARAMETER,
-        default: get(
-          "flex_grid_to_canvas",
-          "default",
-          DEFAULT_FLEX_GRID_TO_CANVAS,
-        ),
-        callback: function (value) {
-          flex_grid_to_canvas = value;
           main_draw();
         },
       },

@@ -24,9 +24,14 @@ const DEFAULT_TITLE = "sketch";
 
 let title = DEFAULT_TITLE;
 
+const DEFAULT_BACKGROUND_COLOR = [80, 80, 80];
+
+let background_color = DEFAULT_BACKGROUND_COLOR;
+
 function default_canvas_callback() {
   randomSeed(random_seed);
   resizeCanvas(canvas_width, canvas_height);
+  background(background_color);
 }
 
 function create_default_canvas_settings(main_draw, options = {}) {
@@ -108,6 +113,18 @@ function create_default_canvas_settings(main_draw, options = {}) {
         interval: get("vertical_padding", "interval", DEFAULT_PADDING_INTERVAL),
         callback: function (value) {
           vertical_padding = value;
+          main_draw();
+        },
+      },
+      background_color: {
+        type: COLOR_PARAMETER,
+        default: get(
+          "background_color",
+          "default",
+          DEFAULT_BACKGROUND_COLOR,
+        ),
+        callback: function (value) {
+          background_color = value;
           main_draw();
         },
       },

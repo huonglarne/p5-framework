@@ -1,4 +1,3 @@
-// Flow Field
 let DEFAULT_FLOW_SCALE = 0.02;
 let flow_scale = DEFAULT_FLOW_SCALE;
 
@@ -10,15 +9,15 @@ let grid;
 function main_draw() {
   default_canvas_callback();
 
-  background(70);
-
   drawWithPadding(horizontal_padding, vertical_padding, () => {
     default_grid_callback();
   });
 }
 
 function setup() {
-  create_default_canvas_settings(main_draw);
+  create_default_canvas_settings(main_draw, {
+    title: { default: "Flow Field" },
+  });
 
   create_default_grid_settings(main_draw);
 
