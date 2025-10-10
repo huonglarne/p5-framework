@@ -18,18 +18,10 @@ function main_draw() {
 }
 
 function setup() {
+  create_default_canvas_settings(main_draw);
 
-  create_default_canvas_settings({
-    title: { default: "Flow Field"}
-  }, main_draw);
+  create_default_grid_settings(main_draw);
 
-  create_default_grid_settings({
-    grid_width: { default: canvas_width - horizontal_padding * 2 },
-    grid_height: { default: canvas_height - vertical_padding * 2 },
-    show_grid: { default: true}
-  }, main_draw);
-
-  
   main_draw();
 
   // createParameterGroup(
@@ -59,7 +51,6 @@ function setup() {
   //   },
   //   "Flow Field Settings",
   // );
-
 }
 
 // function main_draw() {
@@ -107,29 +98,29 @@ function setup() {
 //   strokeWeight(1);
 //   noFill();
 
-  // grid.draw(
-  //   (point) => {
-  //     // Calculate flow direction using Perlin noise
-  //     let angle =
-  //       noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 2;
+// grid.draw(
+//   (point) => {
+//     // Calculate flow direction using Perlin noise
+//     let angle =
+//       noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 2;
 
-  //     // Calculate end point of the arrow
-  //     let endX = point.x + cos(angle) * arrow_length;
-  //     let endY = point.y + sin(angle) * arrow_length;
+//     // Calculate end point of the arrow
+//     let endX = point.x + cos(angle) * arrow_length;
+//     let endY = point.y + sin(angle) * arrow_length;
 
-  //     // Draw the flow line
-  //     line(point.x, point.y, endX, endY);
+//     // Draw the flow line
+//     line(point.x, point.y, endX, endY);
 
-  //     // Draw arrowhead
-  //     push();
-  //     translate(endX, endY);
-  //     rotate(angle);
-  //     line(0, 0, -5, -2);
-  //     line(0, 0, -5, 2);
-  //     pop();
-  //   },
+//     // Draw arrowhead
+//     push();
+//     translate(endX, endY);
+//     rotate(angle);
+//     line(0, 0, -5, -2);
+//     line(0, 0, -5, 2);
+//     pop();
+//   },
 
-  // );
+// );
 // }
 
 function draw() {

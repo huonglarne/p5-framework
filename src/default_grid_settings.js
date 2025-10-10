@@ -13,10 +13,12 @@ let grid_height = DEFAULT_GRID_HEIGHT;
 
 const DEFAULT_SHOW_GRID = false;
 
-// red
 const DEFAULT_GRID_COLOR = [180, 180, 180];
 let show_grid = DEFAULT_SHOW_GRID;
 let grid_color = DEFAULT_GRID_COLOR;
+
+const DEFAULT_FLEX_GRID_TO_CANVAS = true;
+let flex_grid_to_canvas = DEFAULT_FLEX_GRID_TO_CANVAS;
 
 function draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color) {
   if (!show_grid) return;
@@ -50,7 +52,16 @@ function draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color) {
   }
 }
 
+function adjust_grid_to_canvas() {
+  grid_width = canvas_width - horizontal_padding * 2;
+  grid_height = canvas_height - vertical_padding * 2;
+}
+
 function default_grid_callback() {
+  if (flex_grid_to_canvas) {
+    adjust_grid_to_canvas();
+  }
+
   grid = prettyGrid.createGrid({
     rows: n_rows,
     cols: n_cols,
@@ -60,15 +71,32 @@ function default_grid_callback() {
   draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color);
 }
 
-function create_default_grid_settings(options = {}, main_draw) {
+function create_default_grid_settings(main_draw, options = {}) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
   print("options", options);
 
   n_rows = get("n_rows", "default", DEFAULT_GRID_SIZE);
   n_cols = get("n_cols", "default", DEFAULT_GRID_SIZE);
-  grid_width = get("grid_width", "default", DEFAULT_GRID_WIDTH);
-  grid_height = get("grid_height", "default", DEFAULT_GRID_HEIGHT);
+
+  flex_grid_to_canvas = get(
+    "flex_grid_to_canvas",
+    "default",
+    DEFAULT_FLEX_GRID_TO_CANVAS,
+  );
+
+  if (flex_grid_to_canvas) {
+    adjust_grid_to_canvas(
+      canvas_width,
+      canvas_height,
+      horizontal_padding,
+      vertical_padding,
+    );
+  } else {
+    grid_width = get("grid_width", "default", DEFAULT_GRID_WIDTH);
+    grid_height = get("grid_height", "default", DEFAULT_GRID_HEIGHT);
+  }
+
   show_grid = get("show_grid", "default", DEFAULT_SHOW_GRID);
   grid_color = get("grid_color", "default", DEFAULT_GRID_COLOR);
 
@@ -109,6 +137,18 @@ function create_default_grid_settings(options = {}, main_draw) {
         interval: 1,
         callback: function (value) {
           n_rows = value;
+          main_draw();
+        },
+      },
+      flex_grid_to_canvas: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "flex_grid_to_canvas",
+          "default",
+          DEFAULT_FLEX_GRID_TO_CANVAS,
+        ),
+        callback: function (value) {
+          flex_grid_to_canvas = value;
           main_draw();
         },
       },

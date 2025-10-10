@@ -8,8 +8,6 @@ let canvas_width = DEFAULT_CANVAS_SIZE;
 let canvas_height = DEFAULT_CANVAS_SIZE;
 
 const DEFAULT_PADDING = 50;
-const DEFAULT_PADDING_MIN = 0;
-const DEFAULT_PADDING_MAX = 1000;
 const DEFAULT_PADDING_INTERVAL = 10;
 
 let horizontal_padding = DEFAULT_PADDING;
@@ -31,7 +29,7 @@ function default_canvas_callback() {
   resizeCanvas(canvas_width, canvas_height);
 }
 
-function create_default_canvas_settings(options = {}, main_draw) {
+function create_default_canvas_settings(main_draw, options = {}) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
   canvas_width = get("canvas_width", "default", DEFAULT_CANVAS_SIZE);
@@ -42,8 +40,6 @@ function create_default_canvas_settings(options = {}, main_draw) {
   title = get("title", "default", DEFAULT_TITLE);
 
   createCanvas(canvas_width, canvas_height);
-
-  default_canvas_callback();
 
   createParameterGroup(
     {
@@ -92,8 +88,8 @@ function create_default_canvas_settings(options = {}, main_draw) {
       horizontal_padding: {
         type: RANGE_PARAMETER,
         default: get("horizontal_padding", "default", DEFAULT_PADDING),
-        min: get("horizontal_padding", "min", DEFAULT_PADDING_MIN),
-        max: get("horizontal_padding", "max", DEFAULT_PADDING_MAX),
+        min: 0,
+        max: canvas_width,
         interval: get(
           "horizontal_padding",
           "interval",
@@ -107,8 +103,8 @@ function create_default_canvas_settings(options = {}, main_draw) {
       vertical_padding: {
         type: RANGE_PARAMETER,
         default: get("vertical_padding", "default", DEFAULT_PADDING),
-        min: get("vertical_padding", "min", DEFAULT_PADDING_MIN),
-        max: get("vertical_padding", "max", DEFAULT_PADDING_MAX),
+        min: 0,
+        max: canvas_height,
         interval: get("vertical_padding", "interval", DEFAULT_PADDING_INTERVAL),
         callback: function (value) {
           vertical_padding = value;
