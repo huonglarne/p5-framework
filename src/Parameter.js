@@ -315,6 +315,54 @@ class RandomParameter extends Parameter {
   }
 }
 
+class BooleanParameter extends Parameter {
+  constructor(name, defaultValue, value = null) {
+    super(name, defaultValue, value);
+  }
+
+  createControlElement() {
+    const container = document.createElement("div");
+    container.style.cssText =
+      "margin-bottom: 15px; display: flex; align-items: center;";
+
+    const labelElement = document.createElement("label");
+    labelElement.textContent = this.name;
+    labelElement.style.cssText =
+      "font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center;";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = this.value;
+    checkbox.style.cssText = "margin-right: 10px; width: 16px; height: 16px;";
+
+    labelElement.prepend(checkbox);
+
+    const self = this;
+    checkbox.addEventListener("change", function () {
+      const value = this.checked;
+      self.value = value;
+      if (self.onChange) {
+        self.onChange(value);
+      }
+    });
+
+    container.appendChild(labelElement);
+
+    return container;
+  }
+
+  updateControlDisplay() {
+    if (this.controlElement) {
+      const checkbox = this.controlElement.querySelector(
+        'input[type="checkbox"]',
+      );
+      if (checkbox) {
+        checkbox.checked = this.value;
+      }
+    }
+  }
+}
+
 function createParameterGroup(paramConfig, groupName = null) {
   const parameters = {};
 
@@ -374,6 +422,12 @@ function createParameterGroup(paramConfig, groupName = null) {
         config.default || config.value,
         config.min || 0,
         config.max || 100,
+        config.value,
+      );
+    } else if (config.type === BOOLEAN_PARAMETER) {
+      param = new BooleanParameter(
+        varName,
+        config.default || config.value,
         config.value,
       );
     }

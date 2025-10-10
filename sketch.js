@@ -1,214 +1,136 @@
-let DEFAULT_CANVAS_WIDTH = 400;
-let canvas_width = DEFAULT_CANVAS_WIDTH;
+// Flow Field
+let DEFAULT_FLOW_SCALE = 0.02;
+let flow_scale = DEFAULT_FLOW_SCALE;
 
-let DEFAULT_CANVAS_HEIGHT = 400;
-let canvas_height = DEFAULT_CANVAS_HEIGHT;
-
-let DEFAULT_RANDOM_SEED = 1;
-let random_seed = DEFAULT_RANDOM_SEED;
-
-let DEFAULT_TITLE = "Sketch";
-let title = DEFAULT_TITLE;
-
-let DEFAULT_N_ROWS = 9;
-let n_rows = DEFAULT_N_ROWS;
-
-let DEFAULT_N_COLS = 9;
-let n_cols = DEFAULT_N_COLS;
-
-let DEFAULT_CIRCLE_RADIUS = 15;
-let circle_radius = DEFAULT_CIRCLE_RADIUS;
-
-let DEFAULT_HORIZONTAL_PADDING = 40;
-let horizontal_padding = DEFAULT_HORIZONTAL_PADDING;
-
-let DEFAULT_VERTICAL_PADDING = 40;
-let vertical_padding = DEFAULT_VERTICAL_PADDING;
+let DEFAULT_ARROW_LENGTH = 15;
+let arrow_length = DEFAULT_ARROW_LENGTH;
 
 let grid;
 
-function setup() {
-  createCanvas(canvas_width, canvas_height);
-
-  randomSeed(random_seed);
-
-  grid = prettyGrid.createGrid({
-    rows: n_rows,
-    cols: n_cols,
-    width: canvas_width - horizontal_padding * 2,
-    height: canvas_height - vertical_padding * 2,
-  });
-
-  drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-
-  createParameterGroup(
-    {
-      seed: {
-        type: RANDOM_PARAMETER,
-        default: DEFAULT_RANDOM_SEED,
-        min: 1,
-        max: 1000,
-        callback: function (value) {
-          random_seed = value;
-          randomSeed(random_seed);
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-      title: {
-        type: INPUT_PARAMETER,
-        default: DEFAULT_TITLE,
-        callback: function (value) {
-          title = value;
-        },
-      },
-      canvas_width: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_CANVAS_WIDTH,
-        min: 0,
-        max: 800,
-        interval: 50,
-        callback: function (value) {
-          canvas_width = value;
-          resizeCanvas(canvas_width, canvas_height);
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-      canvas_height: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_CANVAS_HEIGHT,
-        min: 0,
-        max: 800,
-        interval: 50,
-        callback: function (value) {
-          canvas_height = value;
-          resizeCanvas(canvas_width, canvas_height);
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-      horizontal_padding: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_HORIZONTAL_PADDING,
-        min: 0,
-        max: 100,
-        interval: 5,
-        callback: function (value) {
-          horizontal_padding = value;
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-      vertical_padding: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_VERTICAL_PADDING,
-        min: 0,
-        max: 100,
-        interval: 5,
-        callback: function (value) {
-          vertical_padding = value;
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-    },
-    "Canvas Settings",
-  );
-
-  createParameterGroup(
-    {
-      n_cols: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_N_COLS,
-        min: 1,
-        max: 20,
-        interval: 1,
-        callback: function (value) {
-          n_cols = value;
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-      n_rows: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_N_ROWS,
-        min: 1,
-        max: 20,
-        interval: 1,
-        callback: function (value) {
-          n_rows = value;
-          grid = prettyGrid.createGrid({
-            rows: n_rows,
-            cols: n_cols,
-            width: canvas_width - horizontal_padding * 2,
-            height: canvas_height - vertical_padding * 2,
-          });
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-    },
-    "Grid Settings",
-  );
-
-  createParameterGroup(
-    {
-      circle_radius: {
-        type: RANGE_PARAMETER,
-        default: DEFAULT_CIRCLE_RADIUS,
-        min: 1,
-        max: 100,
-        interval: 1,
-        callback: function (value) {
-          circle_radius = value;
-          drawWithPadding(horizontal_padding, vertical_padding, main_draw);
-        },
-      },
-    },
-    "Display Settings",
-  );
-}
-
 function main_draw() {
+  default_canvas_callback();
+
   background(70);
 
-  stroke(225);
-
-  noFill();
-
-  rectMode(CENTER);
-
-  grid.draw(
-    (point) => {
-      rect(point.x, point.y, 20);
-    },
-    not(and(cols(2, n_cols - 3), rows(2, n_rows - 3))),
-  );
+  drawWithPadding(horizontal_padding, vertical_padding, () => {
+    default_grid_callback();
+  });
 }
+
+function setup() {
+
+  create_default_canvas_settings({
+    title: { default: "Flow Field"}
+  }, main_draw);
+
+  create_default_grid_settings({
+    grid_width: { default: canvas_width - horizontal_padding * 2 },
+    grid_height: { default: canvas_height - vertical_padding * 2 },
+    show_grid: { default: true}
+  }, main_draw);
+
+  
+  main_draw();
+
+  // createParameterGroup(
+  //   {
+  //     flow_scale: {
+  //       type: RANGE_PARAMETER,
+  //       default: DEFAULT_FLOW_SCALE,
+  //       min: 0.0005,
+  //       max: 0.03,
+  //       interval: 0.00001,
+  //       callback: function (value) {
+  //         flow_scale = value;
+  //         drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+  //       },
+  //     },
+  //     arrow_length: {
+  //       type: RANGE_PARAMETER,
+  //       default: DEFAULT_ARROW_LENGTH,
+  //       min: 5,
+  //       max: 50,
+  //       interval: 1,
+  //       callback: function (value) {
+  //         arrow_length = value;
+  //         drawWithPadding(horizontal_padding, vertical_padding, main_draw);
+  //       },
+  //     },
+  //   },
+  //   "Flow Field Settings",
+  // );
+
+}
+
+// function main_draw() {
+//   background(70);
+
+//   stroke(225);
+//   strokeWeight(1);
+//   noFill();
+
+//   // generate random starting points
+//   for (let i = 0; i < 500; i++) {
+//     let x = random(0, canvas_width - horizontal_padding * 2);
+//     let y = random(0, canvas_height - vertical_padding * 2);
+
+//     // draw flow line
+//     beginShape();
+//     for (let j = 0; j < 100; j++) {
+//       vertex(x, y);
+
+//       let angle =
+//         noise(
+//           (x + horizontal_padding) * flow_scale,
+//           (y + vertical_padding) * flow_scale,
+//         ) *
+//         TWO_PI *
+//         2;
+//       x += cos(angle) * 2;
+//       y += sin(angle) * 2;
+
+//       // stop if out of bounds
+//       if (
+//         x < 0 ||
+//         x > canvas_width - horizontal_padding * 2 ||
+//         y < 0 ||
+//         y > canvas_height - vertical_padding * 2
+//       ) {
+//         break;
+//       }
+//     }
+//     endShape();
+//   }
+
+//   // Draw flow field
+//   stroke(150);
+//   strokeWeight(1);
+//   noFill();
+
+  // grid.draw(
+  //   (point) => {
+  //     // Calculate flow direction using Perlin noise
+  //     let angle =
+  //       noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 2;
+
+  //     // Calculate end point of the arrow
+  //     let endX = point.x + cos(angle) * arrow_length;
+  //     let endY = point.y + sin(angle) * arrow_length;
+
+  //     // Draw the flow line
+  //     line(point.x, point.y, endX, endY);
+
+  //     // Draw arrowhead
+  //     push();
+  //     translate(endX, endY);
+  //     rotate(angle);
+  //     line(0, 0, -5, -2);
+  //     line(0, 0, -5, 2);
+  //     pop();
+  //   },
+
+  // );
+// }
 
 function draw() {
   frameRate(1);
