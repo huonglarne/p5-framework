@@ -20,7 +20,7 @@ let grid_color = DEFAULT_GRID_COLOR;
 const DEFAULT_FLEX_GRID_TO_CANVAS = true;
 let flex_grid_to_canvas = DEFAULT_FLEX_GRID_TO_CANVAS;
 
-function draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color) {
+function draw_grid_lines() {
   if (!show_grid) return;
 
   stroke(grid_color);
@@ -68,7 +68,7 @@ function default_grid_callback() {
     width: grid_width,
     height: grid_height,
   });
-  draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color);
+  draw_grid_lines();
 }
 
 function create_default_grid_settings(main_draw, options = {}) {
