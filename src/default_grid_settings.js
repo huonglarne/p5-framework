@@ -23,16 +23,9 @@ function draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color) {
 
   stroke(grid_color);
 
-  print("grid", grid);
-
   let points = grid.getPoints();
 
-  print("points", points);
-
-  print("rows, cols", n_rows, n_cols);
-
   for (let c = 0; c < n_cols; c++) {
-
     for (let r = 0; r < n_rows; r++) {
       print("r,c", r, c);
 
@@ -46,16 +39,12 @@ function draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color) {
       if (c < n_cols - 1) {
         end_point = points[c + 1][r];
         line(starting_point.x, starting_point.y, end_point.x, end_point.y);
-
-        print("right line", end_point);
       }
 
       // Draw lines downwards
       if (r < n_rows - 1) {
         end_point = points[c][r + 1];
         line(starting_point.x, starting_point.y, end_point.x, end_point.y);
-
-        print("down line", end_point);
       }
     }
   }
@@ -66,7 +55,7 @@ function default_grid_callback() {
     rows: n_rows,
     cols: n_cols,
     width: grid_width,
-    height: grid_height
+    height: grid_height,
   });
   draw_grid_lines(grid, n_rows, n_cols, show_grid, grid_color);
 }

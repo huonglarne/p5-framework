@@ -31,7 +31,6 @@ function default_canvas_callback() {
   resizeCanvas(canvas_width, canvas_height);
 }
 
-
 function create_default_canvas_settings(options = {}, main_draw) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
@@ -80,7 +79,11 @@ function create_default_canvas_settings(options = {}, main_draw) {
         default: get("canvas_height", "default", DEFAULT_CANVAS_SIZE),
         min: get("canvas_height", "min", DEFAULT_CANVAS_SIZE_MIN),
         max: get("canvas_height", "max", DEFAULT_CANVAS_SIZE_MAX),
-        interval: get("canvas_height", "interval", DEFAULT_CANVAS_SIZE_INTERVAL),
+        interval: get(
+          "canvas_height",
+          "interval",
+          DEFAULT_CANVAS_SIZE_INTERVAL,
+        ),
         callback: function (value) {
           canvas_height = value;
           main_draw();
@@ -91,7 +94,11 @@ function create_default_canvas_settings(options = {}, main_draw) {
         default: get("horizontal_padding", "default", DEFAULT_PADDING),
         min: get("horizontal_padding", "min", DEFAULT_PADDING_MIN),
         max: get("horizontal_padding", "max", DEFAULT_PADDING_MAX),
-        interval: get("horizontal_padding", "interval", DEFAULT_PADDING_INTERVAL),
+        interval: get(
+          "horizontal_padding",
+          "interval",
+          DEFAULT_PADDING_INTERVAL,
+        ),
         callback: function (value) {
           horizontal_padding = value;
           main_draw();
@@ -109,6 +116,6 @@ function create_default_canvas_settings(options = {}, main_draw) {
         },
       },
     },
-    "Canvas Settings"
+    "Canvas Settings",
   );
 }
