@@ -16,7 +16,6 @@ let show_arrow_head = DEFAULT_SHOW_ARROW_HEAD;
 const DEFAULT_FLOW_FIELD_COLOR = [180, 180, 180];
 let flow_field_color = DEFAULT_FLOW_FIELD_COLOR;
 
-
 function draw_flow_field() {
   if (!show_flow_field) return;
 
@@ -29,7 +28,8 @@ function draw_flow_field() {
   for (let c = 0; c < n_cols; c++) {
     for (let r = 0; r < n_rows; r++) {
       let point = points[c][r];
-      let angle = noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 4;
+      let angle =
+        noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 4;
 
       let x2 = point.x + cos(angle) * arrow_length;
       let y2 = point.y + sin(angle) * arrow_length;
@@ -49,11 +49,9 @@ function draw_flow_field() {
   }
 }
 
-
 function default_flow_field_callback() {
   draw_flow_field();
 }
-
 
 function create_default_flow_field_settings(main_draw, options = {}) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
@@ -61,7 +59,11 @@ function create_default_flow_field_settings(main_draw, options = {}) {
   flow_scale = get("flow_scale", "default", DEFAULT_FLOW_SCALE);
   arrow_length = get("arrow_length", "default", DEFAULT_ARROW_LENGTH);
   show_flow_field = get("show_flow_field", "default", DEFAULT_SHOW_FLOW_FIELD);
-  flow_field_color = get("flow_field_color", "default", DEFAULT_FLOW_FIELD_COLOR);
+  flow_field_color = get(
+    "flow_field_color",
+    "default",
+    DEFAULT_FLOW_FIELD_COLOR,
+  );
   show_arrow_head = get("show_arrow_head", "default", DEFAULT_SHOW_ARROW_HEAD);
 
   createParameterGroup(
@@ -87,11 +89,7 @@ function create_default_flow_field_settings(main_draw, options = {}) {
         default: get("flow_scale", "default", DEFAULT_FLOW_SCALE),
         min: get("flow_scale", "min", DEFAULT_FLOW_SCALE_MIN),
         max: get("flow_scale", "max", DEFAULT_FLOW_SCALE_MAX),
-        interval: get(
-          "flow_scale",
-          "interval",
-          DEFAULT_FLOW_SCALE_INTERVAL,
-        ),
+        interval: get("flow_scale", "interval", DEFAULT_FLOW_SCALE_INTERVAL),
         callback: function (value) {
           flow_scale = value;
           main_draw();
@@ -110,10 +108,7 @@ function create_default_flow_field_settings(main_draw, options = {}) {
       },
       flow_field_color: {
         type: COLOR_PARAMETER,
-        default: get(
-          "flow_field_color", "default",
-          DEFAULT_FLOW_FIELD_COLOR,
-        ),
+        default: get("flow_field_color", "default", DEFAULT_FLOW_FIELD_COLOR),
         callback: function (value) {
           flow_field_color = value;
           main_draw();
@@ -122,5 +117,4 @@ function create_default_flow_field_settings(main_draw, options = {}) {
     },
     "Flow Field Settings",
   );
-  
 }

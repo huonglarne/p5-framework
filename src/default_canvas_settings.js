@@ -118,11 +118,7 @@ function create_default_canvas_settings(main_draw, options = {}) {
       },
       background_color: {
         type: COLOR_PARAMETER,
-        default: get(
-          "background_color",
-          "default",
-          DEFAULT_BACKGROUND_COLOR,
-        ),
+        default: get("background_color", "default", DEFAULT_BACKGROUND_COLOR),
         callback: function (value) {
           background_color = value;
           main_draw();
