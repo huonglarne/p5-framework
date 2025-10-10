@@ -7,7 +7,7 @@ let flow_scale = DEFAULT_FLOW_SCALE;
 const DEFAULT_ARROW_LENGTH = 15;
 let arrow_length = DEFAULT_ARROW_LENGTH;
 
-const DEFAULT_SHOW_FLOW_FIELD = true;
+const DEFAULT_SHOW_FLOW_FIELD = false;
 let show_flow_field = DEFAULT_SHOW_FLOW_FIELD;
 
 const DEFAULT_SHOW_ARROW_HEAD = false;

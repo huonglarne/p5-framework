@@ -14,11 +14,11 @@ let horizontal_padding = DEFAULT_PADDING;
 
 let vertical_padding = DEFAULT_PADDING;
 
-const DEFAULT_RANDOM_SEED = 1;
-const DEFAULT_RANDOM_SEED_MIN = 1;
-const DEFAULT_RANDOM_SEED_MAX = 1000;
+const DEFAULT_SEED = 1;
+const DEFAULT_SEED_MIN = 1;
+const DEFAULT_SEED_MAX = 1000;
 
-let random_seed = DEFAULT_RANDOM_SEED;
+let seed = DEFAULT_SEED;
 
 const DEFAULT_TITLE = "sketch";
 
@@ -29,7 +29,8 @@ const DEFAULT_BACKGROUND_COLOR = [80, 80, 80];
 let background_color = DEFAULT_BACKGROUND_COLOR;
 
 function default_canvas_callback() {
-  randomSeed(random_seed);
+  randomSeed(seed);
+  noiseSeed(seed);
   resizeCanvas(canvas_width, canvas_height);
   background(background_color);
 }
@@ -41,7 +42,7 @@ function create_default_canvas_settings(main_draw, options = {}) {
   canvas_height = get("canvas_height", "default", DEFAULT_CANVAS_SIZE);
   horizontal_padding = get("horizontal_padding", "default", DEFAULT_PADDING);
   vertical_padding = get("vertical_padding", "default", DEFAULT_PADDING);
-  random_seed = get("seed", "default", DEFAULT_RANDOM_SEED);
+  seed = get("seed", "default", DEFAULT_SEED);
   title = get("title", "default", DEFAULT_TITLE);
 
   createCanvas(canvas_width, canvas_height);
@@ -50,11 +51,12 @@ function create_default_canvas_settings(main_draw, options = {}) {
     {
       seed: {
         type: RANDOM_PARAMETER,
-        default: get("seed", "default", DEFAULT_RANDOM_SEED),
-        min: get("seed", "min", DEFAULT_RANDOM_SEED_MIN),
-        max: get("seed", "max", DEFAULT_RANDOM_SEED_MAX),
+        default: get("seed", "default", DEFAULT_SEED),
+        min: get("seed", "min", DEFAULT_SEED_MIN),
+        max: get("seed", "max", DEFAULT_SEED_MAX),
         callback: function (value) {
-          random_seed = value;
+          seed = value;
+          main_draw();
         },
       },
       title: {
@@ -62,6 +64,7 @@ function create_default_canvas_settings(main_draw, options = {}) {
         default: get("title", "default", DEFAULT_TITLE),
         callback: function (value) {
           title = value;
+          main_draw();
         },
       },
       canvas_width: {
