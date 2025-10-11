@@ -1,0 +1,31 @@
+{
+  "seed": 198.45,
+  "title": "Flow Field",
+  "canvas_width": 400,
+  "canvas_height": 750,
+  "horizontal_padding": 130,
+  "vertical_padding": 110,
+  "background_color": [
+    80,
+    80,
+    80
+  ],
+  "show_grid": true,
+  "flex_grid_to_canvas": true,
+  "grid_color": [
+    107,
+    107,
+    107
+  ],
+  "n_cols": 50,
+  "n_rows": 28,
+  "show_flow_field": true,
+  "show_flow_field_through_center": true,
+  "flow_field_scale": 0.0033,
+  "flow_field_arrow_length": 28,
+  "flow_field_color": [
+    237,
+    237,
+    237
+  ]
+}
