@@ -17,7 +17,9 @@ function setup() {
     n_cols: { default: 20 },
   });
 
-  create_default_flow_field_settings(main_draw);
+  create_default_flow_field_settings(main_draw, {
+    show_flow_field: { default: true },
+  });
 
   main_draw();
 }

@@ -11,6 +11,9 @@ const DEFAULT_GRID_HEIGHT = 400;
 let grid_width = DEFAULT_GRID_WIDTH;
 let grid_height = DEFAULT_GRID_HEIGHT;
 
+let cell_width = grid_width / n_cols;
+let cell_height = grid_height / n_rows;
+
 const DEFAULT_SHOW_GRID = false;
 
 const DEFAULT_GRID_COLOR = [180, 180, 180];
@@ -58,6 +61,9 @@ function adjust_grid_to_canvas() {
 }
 
 function default_grid_callback() {
+  cell_width = grid_width / n_cols;
+  cell_height = grid_height / n_rows;
+
   if (flex_grid_to_canvas) {
     adjust_grid_to_canvas();
   }
@@ -68,6 +74,7 @@ function default_grid_callback() {
     width: grid_width,
     height: grid_height,
   });
+
   draw_grid_lines();
 }
 

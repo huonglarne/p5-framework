@@ -1,17 +1,20 @@
-const DEFAULT_FLOW_SCALE = 0.002;
-const DEFAULT_FLOW_SCALE_MIN = 0.0005;
-const DEFAULT_FLOW_SCALE_MAX = 0.025;
-const DEFAULT_FLOW_SCALE_INTERVAL = 0.0001;
-let flow_scale = DEFAULT_FLOW_SCALE;
+const DEFAULT_FLOW_FIELD_SCALE = 0.002;
+const DEFAULT_FLOW_FIELD_SCALE_MIN = 0.0005;
+const DEFAULT_FLOW_FIELD_SCALE_MAX = 0.025;
+const DEFAULT_FLOW_field_SCALE_INTERVAL = 0.0001;
+let flow_field_scale = DEFAULT_FLOW_FIELD_SCALE;
 
-const DEFAULT_ARROW_LENGTH = 15;
-let arrow_length = DEFAULT_ARROW_LENGTH;
+const DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH = 15;
+let flow_field_arrow_length = DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH;
 
 const DEFAULT_SHOW_FLOW_FIELD = false;
 let show_flow_field = DEFAULT_SHOW_FLOW_FIELD;
 
-const DEFAULT_SHOW_ARROW_HEAD = false;
-let show_arrow_head = DEFAULT_SHOW_ARROW_HEAD;
+const DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD = false;
+let show_flow_field_arrow_head = DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD;
+
+const DEFAULT_SHOW_FLOW_FIELD_THROUGH_CENTER = true;
+let show_flow_field_through_center = DEFAULT_SHOW_FLOW_FIELD_THROUGH_CENTER;
 
 const DEFAULT_FLOW_FIELD_COLOR = [180, 180, 180];
 let flow_field_color = DEFAULT_FLOW_FIELD_COLOR;
@@ -21,30 +24,32 @@ function draw_flow_field() {
 
   stroke(flow_field_color);
   strokeWeight(1);
-  fill(flow_field_color);
 
   let points = grid.getPoints();
 
   for (let c = 0; c < n_cols; c++) {
     for (let r = 0; r < n_rows; r++) {
       let point = points[c][r];
-      let angle =
-        noise(point.x * flow_scale, point.y * flow_scale) * TWO_PI * 4;
 
-      let x2 = point.x + cos(angle) * arrow_length;
-      let y2 = point.y + sin(angle) * arrow_length;
+      let x, y;
 
-      // Draw line
-      line(point.x, point.y, x2, y2);
+      x = point.x;
+      y = point.y;
 
-      if (!show_arrow_head) continue;
-      // Draw arrowhead
-      push();
-      translate(x2, y2);
-      rotate(angle);
-      line(0, 0, -5, -2);
-      line(0, 0, -5, 2);
-      pop();
+      let { x1, y1, x2, y2, angle } = calculate_flow_field_arrow(
+        x,
+        y,
+        flow_field_arrow_length,
+        show_flow_field_through_center,
+      );
+
+      print("flow field line", x1, y1, x2, y2);
+
+      line(x1, y1, x2, y2);
+
+      if (!show_flow_field_arrow_head) continue;
+
+      draw_arrowhead(x2, y2, angle);
     }
   }
 }
@@ -56,15 +61,32 @@ function default_flow_field_callback() {
 function create_default_flow_field_settings(main_draw, options = {}) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
-  flow_scale = get("flow_scale", "default", DEFAULT_FLOW_SCALE);
-  arrow_length = get("arrow_length", "default", DEFAULT_ARROW_LENGTH);
+  flow_field_scale = get(
+    "flow_field_scale",
+    "default",
+    DEFAULT_FLOW_FIELD_SCALE,
+  );
+  flow_field_arrow_length = get(
+    "flow_field_arrow_length",
+    "default",
+    DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH,
+  );
   show_flow_field = get("show_flow_field", "default", DEFAULT_SHOW_FLOW_FIELD);
   flow_field_color = get(
     "flow_field_color",
     "default",
     DEFAULT_FLOW_FIELD_COLOR,
   );
-  show_arrow_head = get("show_arrow_head", "default", DEFAULT_SHOW_ARROW_HEAD);
+  show_flow_field_arrow_head = get(
+    "show_flow_field_arrow_head",
+    "default",
+    DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD,
+  );
+  show_flow_field_through_center = get(
+    "show_flow_field_through_center",
+    "default",
+    DEFAULT_SHOW_FLOW_FIELD_THROUGH_CENTER,
+  );
 
   createParameterGroup(
     {
@@ -76,33 +98,57 @@ function create_default_flow_field_settings(main_draw, options = {}) {
           main_draw();
         },
       },
-      show_arrow_head: {
+      show_flow_field_arrow_head: {
         type: BOOLEAN_PARAMETER,
-        default: get("show_arrow_head", "default", DEFAULT_SHOW_ARROW_HEAD),
+        default: get(
+          "show_flow_field_arrow_head",
+          "default",
+          DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD,
+        ),
         callback: function (value) {
-          show_arrow_head = value;
+          show_flow_field_arrow_head = value;
           main_draw();
         },
       },
-      flow_scale: {
-        type: RANGE_PARAMETER,
-        default: get("flow_scale", "default", DEFAULT_FLOW_SCALE),
-        min: get("flow_scale", "min", DEFAULT_FLOW_SCALE_MIN),
-        max: get("flow_scale", "max", DEFAULT_FLOW_SCALE_MAX),
-        interval: get("flow_scale", "interval", DEFAULT_FLOW_SCALE_INTERVAL),
+      show_flow_field_through_center: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "show_flow_field_through_center",
+          "default",
+          DEFAULT_SHOW_FLOW_FIELD_THROUGH_CENTER,
+        ),
         callback: function (value) {
-          flow_scale = value;
+          show_flow_field_through_center = value;
           main_draw();
         },
       },
-      arrow_length: {
+      flow_field_scale: {
         type: RANGE_PARAMETER,
-        default: get("arrow_length", "default", DEFAULT_ARROW_LENGTH),
-        min: get("arrow_length", "min", 5),
-        max: get("arrow_length", "max", 50),
-        interval: get("arrow_length", "interval", 1),
+        default: get("flow_field_scale", "default", DEFAULT_FLOW_FIELD_SCALE),
+        min: get("flow_field_scale", "min", DEFAULT_FLOW_FIELD_SCALE_MIN),
+        max: get("flow_field_scale", "max", DEFAULT_FLOW_FIELD_SCALE_MAX),
+        interval: get(
+          "flow_field_scale",
+          "interval",
+          DEFAULT_FLOW_field_SCALE_INTERVAL,
+        ),
         callback: function (value) {
-          arrow_length = value;
+          flow_field_scale = value;
+          main_draw();
+        },
+      },
+      flow_field_arrow_length: {
+        type: RANGE_PARAMETER,
+        default: get(
+          "flow_field_arrow_length",
+          "default",
+          DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH,
+        ),
+        min: get("flow_field_arrow_length", "min", 5),
+        max: get("flow_field_arrow_length", "max", 50),
+        interval: get("flow_field_arrow_length", "interval", 1),
+        callback: function (value) {
+          flow_field_arrow_length = value;
           main_draw();
         },
       },
