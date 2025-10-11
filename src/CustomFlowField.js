@@ -10,8 +10,18 @@ class CustomFlowField {
     show_flow_field_through_center = true,
     length = null,
   ) {
-    this.grid.inInnerGridContext(() => {
-      this.grid.inner_grid.draw((point) => {
+    let grid_type, grid;
+
+    if (show_flow_field_through_center) {
+      grid_type = "inner";
+      grid = this.grid.inner_grid;
+    } else {
+      grid_type = "outer";
+      grid = this.grid.outer_grid;
+    }
+
+    this.grid.inContext(() => {
+      grid.draw((point) => {
         let x1, y1, x2, y2, angle;
 
         if (length === null) {
@@ -40,6 +50,6 @@ class CustomFlowField {
           draw_arrowhead(x2, y2, angle);
         }
       });
-    });
+    }, grid_type);
   }
 }

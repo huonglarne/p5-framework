@@ -59,6 +59,14 @@ class CustomGrid {
     pop();
   }
 
+  inContext(callback, grid_type = "outer") {
+    if (grid_type === "inner") {
+      this.inInnerGridContext(callback);
+    } else {
+      this.inOuterGridContext(callback);
+    }
+  }
+
   drawOuterGridLines() {
     this.inOuterGridContext(() => {
       draw_grid_lines(this.outer_points);

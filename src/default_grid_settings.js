@@ -72,8 +72,16 @@ function default_grid_callback() {
 function create_default_grid_settings(main_draw, options = {}) {
   const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
-  grid_n_cells_vertical = get("grid_n_rows", "default", DEFAULT_GRID_SIZE);
-  grid_n_cells_horizontal = get("grid_n_cols", "default", DEFAULT_GRID_SIZE);
+  grid_n_cells_vertical = get(
+    "grid_n_cells_vertical",
+    "default",
+    DEFAULT_GRID_SIZE,
+  );
+  grid_n_cells_horizontal = get(
+    "grid_n_cells_horizontal",
+    "default",
+    DEFAULT_GRID_SIZE,
+  );
 
   flex_grid_to_canvas = get(
     "flex_grid_to_canvas",
@@ -94,7 +102,7 @@ function create_default_grid_settings(main_draw, options = {}) {
   }
 
   show_inner_grid_lines = get(
-    "show_inner_grid",
+    "show_inner_grid_lines",
     "default",
     DEFAULT_SHOW_INNER_GRID_LINES,
   );
@@ -175,22 +183,22 @@ function create_default_grid_settings(main_draw, options = {}) {
           main_draw();
         },
       },
-      grid_n_cols: {
+      grid_n_cells_horizontal: {
         type: RANGE_PARAMETER,
-        default: get("grid_n_cols", "default", DEFAULT_GRID_SIZE),
-        min: get("grid_n_cols", "min", DEFAULT_MIN_GRID_SIZE),
-        max: get("grid_n_cols", "max", DEFAULT_MAX_GRID_SIZE),
+        default: get("grid_n_cells_horizontal", "default", DEFAULT_GRID_SIZE),
+        min: get("grid_n_cells_horizontal", "min", DEFAULT_MIN_GRID_SIZE),
+        max: get("grid_n_cells_horizontal", "max", DEFAULT_MAX_GRID_SIZE),
         interval: 1,
         callback: function (value) {
           grid_n_cells_horizontal = value;
           main_draw();
         },
       },
-      grid_n_rows: {
+      grid_n_cells_vertical: {
         type: RANGE_PARAMETER,
-        default: get("grid_n_rows", "default", DEFAULT_GRID_SIZE),
-        min: get("grid_n_rows", "min", DEFAULT_MIN_GRID_SIZE),
-        max: get("grid_n_rows", "max", DEFAULT_MAX_GRID_SIZE),
+        default: get("grid_n_cells_vertical", "default", DEFAULT_GRID_SIZE),
+        min: get("grid_n_cells_vertical", "min", DEFAULT_MIN_GRID_SIZE),
+        max: get("grid_n_cells_vertical", "max", DEFAULT_MAX_GRID_SIZE),
         interval: 1,
         callback: function (value) {
           grid_n_cells_vertical = value;

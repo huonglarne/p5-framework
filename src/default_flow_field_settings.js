@@ -4,8 +4,15 @@ const DEFAULT_FLOW_FIELD_SCALE_MAX = 0.025;
 const DEFAULT_FLOW_field_SCALE_INTERVAL = 0.0001;
 let flow_field_scale = DEFAULT_FLOW_FIELD_SCALE;
 
-const DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH = 15;
-let flow_field_arrow_length = DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH;
+const DEFAULT_FLOW_FIELD_LINE_LENGTH = 30;
+const DEFAULT_FLOW_FIELD_LINE_LENGTH_MIN = 1;
+const DEFAULT_FLOW_FIELD_LINE_LENGTH_MAX = 200;
+const DEFAULT_FLOW_FIELD_LINE_LENGTH_INTERVAL = 1;
+let flow_field_line_length = DEFAULT_FLOW_FIELD_LINE_LENGTH;
+
+const DEFAULT_FLOW_FIELD_FLEX_LINE_LENGTH_TO_CELL = true;
+let flow_field_flex_line_length_to_cell =
+  DEFAULT_FLOW_FIELD_FLEX_LINE_LENGTH_TO_CELL;
 
 const DEFAULT_SHOW_FLOW_FIELD_LINES = false;
 let show_flow_field_lines = DEFAULT_SHOW_FLOW_FIELD_LINES;
@@ -28,10 +35,18 @@ function default_flow_field_callback(grid = null) {
 
   if (show_flow_field_lines) {
     stroke(flow_field_color);
+
+    if (flow_field_flex_line_length_to_cell) {
+      length = null;
+    } else {
+      length = flow_field_line_length;
+    }
+
     flow_field.drawFlowField(
       show_flow_field_lines,
       show_flow_field_arrow_head,
       show_flow_field_through_center,
+      length,
     );
   }
 }
@@ -44,10 +59,15 @@ function create_default_flow_field_settings(main_draw, options = {}) {
     "default",
     DEFAULT_FLOW_FIELD_SCALE,
   );
-  flow_field_arrow_length = get(
-    "flow_field_arrow_length",
+  flow_field_line_length = get(
+    "flow_field_line_length",
     "default",
-    DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH,
+    DEFAULT_FLOW_FIELD_LINE_LENGTH,
+  );
+  flow_field_flex_line_length_to_cell = get(
+    "flow_field_flex_line_length_to_cell",
+    "default",
+    DEFAULT_FLOW_FIELD_FLEX_LINE_LENGTH_TO_CELL,
   );
   show_flow_field_lines = get(
     "show_flow_field_lines",
@@ -72,15 +92,27 @@ function create_default_flow_field_settings(main_draw, options = {}) {
 
   createParameterGroup(
     {
-      show_flow_field: {
+      show_flow_field_lines: {
         type: BOOLEAN_PARAMETER,
         default: get(
-          "show_flow_field",
+          "show_flow_field_lines",
           "default",
           DEFAULT_SHOW_FLOW_FIELD_LINES,
         ),
         callback: function (value) {
           show_flow_field_lines = value;
+          main_draw();
+        },
+      },
+      flow_field_flex_line_length_to_cell: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "flow_field_flex_line_length_to_cell",
+          "default",
+          DEFAULT_FLOW_FIELD_FLEX_LINE_LENGTH_TO_CELL,
+        ),
+        callback: function (value) {
+          flow_field_flex_line_length_to_cell = value;
           main_draw();
         },
       },
@@ -123,18 +155,30 @@ function create_default_flow_field_settings(main_draw, options = {}) {
           main_draw();
         },
       },
-      flow_field_arrow_length: {
+      flow_field_line_length: {
         type: RANGE_PARAMETER,
         default: get(
-          "flow_field_arrow_length",
+          "flow_field_line_length",
           "default",
-          DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH,
+          DEFAULT_FLOW_FIELD_LINE_LENGTH,
         ),
-        min: get("flow_field_arrow_length", "min", 5),
-        max: get("flow_field_arrow_length", "max", 50),
-        interval: get("flow_field_arrow_length", "interval", 1),
+        min: get(
+          "flow_field_line_length",
+          "min",
+          DEFAULT_FLOW_FIELD_LINE_LENGTH_MIN,
+        ),
+        max: get(
+          "flow_field_line_length",
+          "max",
+          DEFAULT_FLOW_FIELD_LINE_LENGTH_MAX,
+        ),
+        interval: get(
+          "flow_field_line_length",
+          "interval",
+          DEFAULT_FLOW_FIELD_LINE_LENGTH_INTERVAL,
+        ),
         callback: function (value) {
-          flow_field_arrow_length = value;
+          flow_field_line_length = value;
           main_draw();
         },
       },
