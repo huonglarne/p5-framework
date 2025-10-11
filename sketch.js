@@ -16,7 +16,7 @@ function setup() {
   });
 
   create_default_flow_field_settings(main_draw, {
-    show_flow_field: { default: true },
+    show_flow_field_lines: { default: true },
   });
 
   main_draw();

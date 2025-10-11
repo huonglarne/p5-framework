@@ -7,8 +7,8 @@ let flow_field_scale = DEFAULT_FLOW_FIELD_SCALE;
 const DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH = 15;
 let flow_field_arrow_length = DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH;
 
-const DEFAULT_SHOW_FLOW_FIELD = false;
-let show_flow_field = DEFAULT_SHOW_FLOW_FIELD;
+const DEFAULT_SHOW_FLOW_FIELD_LINES = false;
+let show_flow_field_lines = DEFAULT_SHOW_FLOW_FIELD_LINES;
 
 const DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD = false;
 let show_flow_field_arrow_head = DEFAULT_SHOW_FLOW_FIELD_ARROW_HEAD;
@@ -24,16 +24,16 @@ function default_flow_field_callback(grid = null) {
     grid = default_grid_callback();
   }
 
-  let flow_field = new CustomFlowField(
-    grid,
-    flow_field_scale,
-    flow_field_arrow_length,
-  );
+  let flow_field = new CustomFlowField(grid, flow_field_scale);
 
-  if (show_flow_field) {
+  if (show_flow_field_lines) {
     stroke(flow_field_color);
-    flow_field.drawFlowField();
-  }  
+    flow_field.drawFlowField(
+      show_flow_field_lines,
+      show_flow_field_arrow_head,
+      show_flow_field_through_center,
+    );
+  }
 }
 
 function create_default_flow_field_settings(main_draw, options = {}) {
@@ -49,7 +49,11 @@ function create_default_flow_field_settings(main_draw, options = {}) {
     "default",
     DEFAULT_FLOW_FIELD_flow_field_ARROW_LENGTH,
   );
-  show_flow_field = get("show_flow_field", "default", DEFAULT_SHOW_FLOW_FIELD);
+  show_flow_field_lines = get(
+    "show_flow_field_lines",
+    "default",
+    DEFAULT_SHOW_FLOW_FIELD_LINES,
+  );
   flow_field_color = get(
     "flow_field_color",
     "default",
@@ -70,9 +74,13 @@ function create_default_flow_field_settings(main_draw, options = {}) {
     {
       show_flow_field: {
         type: BOOLEAN_PARAMETER,
-        default: get("show_flow_field", "default", DEFAULT_SHOW_FLOW_FIELD),
+        default: get(
+          "show_flow_field",
+          "default",
+          DEFAULT_SHOW_FLOW_FIELD_LINES,
+        ),
         callback: function (value) {
-          show_flow_field = value;
+          show_flow_field_lines = value;
           main_draw();
         },
       },

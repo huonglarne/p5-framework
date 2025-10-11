@@ -1,5 +1,12 @@
 class CustomGrid {
-  constructor(origin_x, origin_y, width, height, n_cells_horizontal, n_cells_vertical) {
+  constructor(
+    origin_x,
+    origin_y,
+    width,
+    height,
+    n_cells_horizontal,
+    n_cells_vertical,
+  ) {
     this.origin_x = origin_x;
     this.origin_y = origin_y;
     this.width = width;
@@ -35,36 +42,44 @@ class CustomGrid {
     this.outer_points = this.outer_grid.getPoints();
   }
 
-  drawOuterGridLines() {
+  inOuterGridContext(callback) {
     push();
     translate(this.origin_x, this.origin_y);
-    draw_grid_lines(this.outer_points);
+    callback();
     pop();
+  }
+
+  inInnerGridContext(callback) {
+    push();
+    translate(
+      this.origin_x + this.cell_width / 2,
+      this.origin_y + this.cell_height / 2,
+    );
+    callback();
+    pop();
+  }
+
+  drawOuterGridLines() {
+    this.inOuterGridContext(() => {
+      draw_grid_lines(this.outer_points);
+    });
   }
 
   drawInnerGridLines() {
-    push();
-    translate(this.origin_x + this.cell_width / 2, this.origin_y + this.cell_height / 2);
-    draw_grid_lines(this.inner_points);
-    pop();
+    this.inInnerGridContext(() => {
+      draw_grid_lines(this.inner_points);
+    });
   }
 
   drawOuterCorners() {
-    push();
-    translate(this.origin_x, this.origin_y);
-    this.outer_grid.draw(
-      point => ellipse(point.x, point.y, 2, 2),
-    );
-    pop();
+    this.inOuterGridContext(() => {
+      this.outer_grid.draw((point) => ellipse(point.x, point.y, 2, 2));
+    });
   }
 
   drawInnerCorners() {
-    push();
-    translate(this.origin_x + this.cell_width / 2, this.origin_y + this.cell_height / 2);
-    this.inner_grid.draw(
-      point => ellipse(point.x, point.y, 2, 2),
-    );
-    pop();
+    this.inInnerGridContext(() => {
+      this.inner_grid.draw((point) => ellipse(point.x, point.y, 2, 2));
+    });
   }
-
 }

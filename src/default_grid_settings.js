@@ -70,7 +70,7 @@ function default_grid_callback() {
 }
 
 function create_default_grid_settings(main_draw, options = {}) {
-  const get = (param, key, fallback) => options[param]?.[key] ?? fallback;  
+  const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
 
   grid_n_cells_vertical = get("grid_n_rows", "default", DEFAULT_GRID_SIZE);
   grid_n_cells_horizontal = get("grid_n_cols", "default", DEFAULT_GRID_SIZE);
@@ -93,14 +93,27 @@ function create_default_grid_settings(main_draw, options = {}) {
     grid_height = get("grid_height", "default", DEFAULT_GRID_HEIGHT);
   }
 
-  show_inner_grid_lines = get("show_inner_grid", "default", DEFAULT_SHOW_INNER_GRID_LINES);
+  show_inner_grid_lines = get(
+    "show_inner_grid",
+    "default",
+    DEFAULT_SHOW_INNER_GRID_LINES,
+  );
+  show_outer_grid_lines = get(
+    "show_outer_grid_lines",
+    "default",
+    DEFAULT_SHOW_OUTER_GRID_LINES,
+  );
   grid_color = get("grid_color", "default", DEFAULT_GRID_COLOR);
 
   createParameterGroup(
     {
       show_inner_grid_lines: {
         type: BOOLEAN_PARAMETER,
-        default: get("show_inner_grid_lines", "default", DEFAULT_SHOW_INNER_GRID_LINES),
+        default: get(
+          "show_inner_grid_lines",
+          "default",
+          DEFAULT_SHOW_INNER_GRID_LINES,
+        ),
         callback: function (value) {
           show_inner_grid_lines = value;
           main_draw();

@@ -9,7 +9,12 @@ function calculate_noise_angle(x, y, scale, multiplier = 4) {
   return noise(x * scale, y * scale) * TWO_PI * multiplier;
 }
 
-function calculate_flow_field_arrow_constant_length(x, y, line_length, through_point) {
+function calculate_flow_field_arrow_constant_length(
+  x,
+  y,
+  line_length,
+  through_point,
+) {
   let angle = calculate_noise_angle(x, y, flow_field_scale);
 
   let x1, y1, x2, y2;
@@ -31,15 +36,26 @@ function calculate_flow_field_arrow_constant_length(x, y, line_length, through_p
   return { x1, y1, x2, y2, angle };
 }
 
-function calculate_flow_field_arrow_flexing_length(x, y, flex_width, flex_height, through_point) {
+function calculate_flow_field_arrow_flexing_length(
+  x,
+  y,
+  flex_width,
+  flex_height,
+  through_point,
+) {
   let angle = calculate_noise_angle(x, y, flow_field_scale);
-  
-  let line_length =  min(
-    abs(flex_width / cos(angle)),
-    abs(flex_height / sin(angle))
-  )
 
-  return calculate_flow_field_arrow_constant_length(x, y, line_length, through_point);
+  let line_length = min(
+    abs(flex_width / cos(angle)),
+    abs(flex_height / sin(angle)),
+  );
+
+  return calculate_flow_field_arrow_constant_length(
+    x,
+    y,
+    line_length,
+    through_point,
+  );
 }
 
 function draw_arrowhead(x, y, angle) {
@@ -55,7 +71,7 @@ function calculate_cell_size(width, height, n_cols, n_rows) {
   var cell_width = width / (n_cols > 1 ? n_cols - 1 : 1);
   var cell_height = height / (n_rows > 1 ? n_rows - 1 : 1);
 
-  return {cell_width, cell_height};
+  return { cell_width, cell_height };
 }
 
 function draw_grid_lines(points) {
@@ -64,7 +80,6 @@ function draw_grid_lines(points) {
 
   for (let c = 0; c < n_cols; c++) {
     for (let r = 0; r < n_rows; r++) {
-
       starting_point = points[c][r];
 
       let end_point;
