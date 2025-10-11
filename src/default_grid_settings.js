@@ -175,14 +175,6 @@ function create_default_grid_settings(main_draw, options = {}) {
           main_draw();
         },
       },
-      grid_color: {
-        type: COLOR_PARAMETER,
-        default: get("grid_color", "default", DEFAULT_GRID_COLOR),
-        callback: function (value) {
-          grid_color = value;
-          main_draw();
-        },
-      },
       grid_n_cells_horizontal: {
         type: RANGE_PARAMETER,
         default: get("grid_n_cells_horizontal", "default", DEFAULT_GRID_SIZE),
@@ -202,6 +194,14 @@ function create_default_grid_settings(main_draw, options = {}) {
         interval: 1,
         callback: function (value) {
           grid_n_cells_vertical = value;
+          main_draw();
+        },
+      },
+      grid_color: {
+        type: COLOR_PARAMETER,
+        default: get("grid_color", "default", DEFAULT_GRID_COLOR),
+        callback: function (value) {
+          grid_color = value;
           main_draw();
         },
       },
