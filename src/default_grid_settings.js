@@ -2,8 +2,8 @@ const DEFAULT_GRID_SIZE = 3;
 const DEFAULT_MAX_GRID_SIZE = 50;
 const DEFAULT_MIN_GRID_SIZE = 1;
 
-let n_cols = DEFAULT_GRID_SIZE;
-let n_rows = DEFAULT_GRID_SIZE;
+let grid_n_cells_horizontal = DEFAULT_GRID_SIZE;
+let grid_n_cells_vertical = DEFAULT_GRID_SIZE;
 
 const DEFAULT_GRID_WIDTH = 400;
 const DEFAULT_GRID_HEIGHT = 400;
@@ -11,49 +11,23 @@ const DEFAULT_GRID_HEIGHT = 400;
 let grid_width = DEFAULT_GRID_WIDTH;
 let grid_height = DEFAULT_GRID_HEIGHT;
 
-let cell_width = grid_width / n_cols;
-let cell_height = grid_height / n_rows;
+const DEFAULT_SHOW_INNER_GRID_LINES = false;
+let show_inner_grid_lines = DEFAULT_SHOW_INNER_GRID_LINES;
 
-const DEFAULT_SHOW_GRID = false;
+const DEFAULT_SHOW_OUTER_GRID_LINES = false;
+let show_outer_grid_lines = DEFAULT_SHOW_OUTER_GRID_LINES;
+
+const DEFAULT_SHOW_INNER_GRID_CORNERS = false;
+let show_inner_grid_corners = DEFAULT_SHOW_INNER_GRID_CORNERS;
+
+const DEFAULT_SHOW_OUTER_GRID_CORNERS = false;
+let show_outer_grid_corners = DEFAULT_SHOW_OUTER_GRID_CORNERS;
 
 const DEFAULT_GRID_COLOR = [180, 180, 180];
-let show_grid = DEFAULT_SHOW_GRID;
 let grid_color = DEFAULT_GRID_COLOR;
 
 const DEFAULT_FLEX_GRID_TO_CANVAS = true;
 let flex_grid_to_canvas = DEFAULT_FLEX_GRID_TO_CANVAS;
-
-function draw_grid_lines() {
-  if (!show_grid) return;
-
-  stroke(grid_color);
-
-  let points = grid.getPoints();
-
-  for (let c = 0; c < n_cols; c++) {
-    for (let r = 0; r < n_rows; r++) {
-      print("r,c", r, c);
-
-      starting_point = points[c][r];
-
-      print("starting point", starting_point);
-
-      let end_point;
-
-      // Draw lines to the right
-      if (c < n_cols - 1) {
-        end_point = points[c + 1][r];
-        line(starting_point.x, starting_point.y, end_point.x, end_point.y);
-      }
-
-      // Draw lines downwards
-      if (r < n_rows - 1) {
-        end_point = points[c][r + 1];
-        line(starting_point.x, starting_point.y, end_point.x, end_point.y);
-      }
-    }
-  }
-}
 
 function adjust_grid_to_canvas() {
   grid_width = canvas_width - horizontal_padding * 2;
@@ -61,30 +35,45 @@ function adjust_grid_to_canvas() {
 }
 
 function default_grid_callback() {
-  cell_width = grid_width / n_cols;
-  cell_height = grid_height / n_rows;
-
   if (flex_grid_to_canvas) {
     adjust_grid_to_canvas();
   }
 
-  grid = prettyGrid.createGrid({
-    rows: n_rows,
-    cols: n_cols,
-    width: grid_width,
-    height: grid_height,
-  });
+  let grid = new CustomGrid(
+    horizontal_padding,
+    vertical_padding,
+    grid_width,
+    grid_height,
+    grid_n_cells_horizontal,
+    grid_n_cells_vertical,
+  );
 
-  draw_grid_lines();
+  stroke(grid_color);
+
+  if (show_inner_grid_lines) {
+    grid.drawInnerGridLines();
+  }
+
+  if (show_inner_grid_corners) {
+    grid.drawInnerCorners();
+  }
+
+  if (show_outer_grid_lines) {
+    grid.drawOuterGridLines();
+  }
+
+  if (show_outer_grid_corners) {
+    grid.drawOuterCorners();
+  }
+
+  return grid;
 }
 
 function create_default_grid_settings(main_draw, options = {}) {
-  const get = (param, key, fallback) => options[param]?.[key] ?? fallback;
+  const get = (param, key, fallback) => options[param]?.[key] ?? fallback;  
 
-  print("options", options);
-
-  n_rows = get("n_rows", "default", DEFAULT_GRID_SIZE);
-  n_cols = get("n_cols", "default", DEFAULT_GRID_SIZE);
+  grid_n_cells_vertical = get("grid_n_rows", "default", DEFAULT_GRID_SIZE);
+  grid_n_cells_horizontal = get("grid_n_cols", "default", DEFAULT_GRID_SIZE);
 
   flex_grid_to_canvas = get(
     "flex_grid_to_canvas",
@@ -104,16 +93,52 @@ function create_default_grid_settings(main_draw, options = {}) {
     grid_height = get("grid_height", "default", DEFAULT_GRID_HEIGHT);
   }
 
-  show_grid = get("show_grid", "default", DEFAULT_SHOW_GRID);
+  show_inner_grid_lines = get("show_inner_grid", "default", DEFAULT_SHOW_INNER_GRID_LINES);
   grid_color = get("grid_color", "default", DEFAULT_GRID_COLOR);
 
   createParameterGroup(
     {
-      show_grid: {
+      show_inner_grid_lines: {
         type: BOOLEAN_PARAMETER,
-        default: get("show_grid", "default", DEFAULT_SHOW_GRID),
+        default: get("show_inner_grid_lines", "default", DEFAULT_SHOW_INNER_GRID_LINES),
         callback: function (value) {
-          show_grid = value;
+          show_inner_grid_lines = value;
+          main_draw();
+        },
+      },
+      show_inner_grid_corners: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "show_inner_grid_corners",
+          "default",
+          DEFAULT_SHOW_INNER_GRID_CORNERS,
+        ),
+        callback: function (value) {
+          show_inner_grid_corners = value;
+          main_draw();
+        },
+      },
+      show_outer_grid_lines: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "show_outer_grid_lines",
+          "default",
+          DEFAULT_SHOW_OUTER_GRID_LINES,
+        ),
+        callback: function (value) {
+          show_outer_grid_lines = value;
+          main_draw();
+        },
+      },
+      show_outer_grid_corners: {
+        type: BOOLEAN_PARAMETER,
+        default: get(
+          "show_outer_grid_corners",
+          "default",
+          DEFAULT_SHOW_OUTER_GRID_CORNERS,
+        ),
+        callback: function (value) {
+          show_outer_grid_corners = value;
           main_draw();
         },
       },
@@ -137,25 +162,25 @@ function create_default_grid_settings(main_draw, options = {}) {
           main_draw();
         },
       },
-      n_cols: {
+      grid_n_cols: {
         type: RANGE_PARAMETER,
-        default: get("n_cols", "default", DEFAULT_GRID_SIZE),
-        min: get("n_cols", "min", DEFAULT_MIN_GRID_SIZE),
-        max: get("n_cols", "max", DEFAULT_MAX_GRID_SIZE),
+        default: get("grid_n_cols", "default", DEFAULT_GRID_SIZE),
+        min: get("grid_n_cols", "min", DEFAULT_MIN_GRID_SIZE),
+        max: get("grid_n_cols", "max", DEFAULT_MAX_GRID_SIZE),
         interval: 1,
         callback: function (value) {
-          n_cols = value;
+          grid_n_cells_horizontal = value;
           main_draw();
         },
       },
-      n_rows: {
+      grid_n_rows: {
         type: RANGE_PARAMETER,
-        default: get("n_rows", "default", DEFAULT_GRID_SIZE),
-        min: get("n_rows", "min", DEFAULT_MIN_GRID_SIZE),
-        max: get("n_rows", "max", DEFAULT_MAX_GRID_SIZE),
+        default: get("grid_n_rows", "default", DEFAULT_GRID_SIZE),
+        min: get("grid_n_rows", "min", DEFAULT_MIN_GRID_SIZE),
+        max: get("grid_n_rows", "max", DEFAULT_MAX_GRID_SIZE),
         interval: 1,
         callback: function (value) {
-          n_rows = value;
+          grid_n_cells_vertical = value;
           main_draw();
         },
       },

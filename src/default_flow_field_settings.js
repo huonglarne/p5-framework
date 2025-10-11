@@ -19,43 +19,21 @@ let show_flow_field_through_center = DEFAULT_SHOW_FLOW_FIELD_THROUGH_CENTER;
 const DEFAULT_FLOW_FIELD_COLOR = [180, 180, 180];
 let flow_field_color = DEFAULT_FLOW_FIELD_COLOR;
 
-function draw_flow_field() {
-  if (!show_flow_field) return;
-
-  stroke(flow_field_color);
-  strokeWeight(1);
-
-  let points = grid.getPoints();
-
-  for (let c = 0; c < n_cols; c++) {
-    for (let r = 0; r < n_rows; r++) {
-      let point = points[c][r];
-
-      let x, y;
-
-      x = point.x;
-      y = point.y;
-
-      let { x1, y1, x2, y2, angle } = calculate_flow_field_arrow(
-        x,
-        y,
-        flow_field_arrow_length,
-        show_flow_field_through_center,
-      );
-
-      print("flow field line", x1, y1, x2, y2);
-
-      line(x1, y1, x2, y2);
-
-      if (!show_flow_field_arrow_head) continue;
-
-      draw_arrowhead(x2, y2, angle);
-    }
+function default_flow_field_callback(grid = null) {
+  if (grid === null) {
+    grid = default_grid_callback();
   }
-}
 
-function default_flow_field_callback() {
-  draw_flow_field();
+  let flow_field = new CustomFlowField(
+    grid,
+    flow_field_scale,
+    flow_field_arrow_length,
+  );
+
+  if (show_flow_field) {
+    stroke(flow_field_color);
+    flow_field.drawFlowField();
+  }  
 }
 
 function create_default_flow_field_settings(main_draw, options = {}) {
